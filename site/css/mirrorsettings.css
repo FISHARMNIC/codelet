@@ -1,0 +1,9 @@
+.CodeMirror {
+    width: 50%;
+    height: 100%;
+}
+
+.CodeMirror .CodeMirror-placeholder {
+    color: var(--env-dark) !important;
+    font-style: italic;
+  }

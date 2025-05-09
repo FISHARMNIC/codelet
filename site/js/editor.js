@@ -1,0 +1,19 @@
+const textarea = document.getElementById("code")
+
+const editor = CodeMirror.fromTextArea(textarea, {
+    lineNumbers: true,
+    mode: 'text/x-csrc',
+    extraKeys: {
+        "Tab": function(cm){
+            cm.replaceSelection("    " , "end");
+        }
+    },
+    foldOptions: {
+        rangeFinder: CodeMirror.fold.brace
+    },
+    foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    placeholder: 'Enter your C code here...',
+})
+
+ editor.setSize(null, "100%");

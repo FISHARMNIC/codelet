@@ -1,0 +1,10 @@
+:root {
+    /* https://samanthadigital.com/blue-color-palette/ */
+    --env-lightest: #E1E5EA;
+    --env-light: #B7D8E6;
+    --env-middle: #4A90E2;
+    --env-dark: #2B7A78;
+    --env-darkest: #264653;
+
+    --navbar-height: 7;
+}

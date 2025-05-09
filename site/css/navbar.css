@@ -1,0 +1,29 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: calc(var(--navbar-height) * 1vh);
+    align-items: center;
+    display: flex;
+    justify-content: left;
+    height: calc(var(--navbar-height) * 1vh);
+    background-color: var(--env-darkest);
+}
+
+li {
+    margin-left: 10px;
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+}
+
+li a:hover
+{
+    cursor:pointer;
+}

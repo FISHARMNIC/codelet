@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/resize.css">
+    <link rel="stylesheet" href="css/noscroll.css">
+    <link rel="stylesheet" href="css/floating.css">
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/mirrorsettings.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    
+
+    <!-- Codemirror CSS -->
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+    </link>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/idea.min.css">
+    </link>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/oceanic-next.min.css">
+    </link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/foldgutter.min.css" integrity="sha512-YwkMTlTHn8dBnwa47IF+cKsS00HPiiVhQ4DpwT1KF2gUftfFR7aefepabSPLAs6zrMyD89M3w0Ow6mQ5XJEUCw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Codemirror Scripts -->
+    <script language="javascript" type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+    <script language="javascript" type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/foldcode.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/brace-fold.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/foldgutter.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/display/placeholder.min.js" defer></script>
+
+    <!-- Custom scripts -->
+        <script src="js/resize.js" defer></script>
+        <script src="js/editor.js" defer></script>
+        <script src="js/comms.js" defer></script>
+        <script src="js/compile.js" defer></script>
+        <script src="js/wasm.js" defer></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+
+
+    <title>Codelet</title>
+</head>
+
+<body style="height: 100%;" class="roboto-font">
+    <div>
+
+<ul>
+    <li><a onclick="compile()">Run</a></li>
+  </ul>
+    </div>
+    <div class="container">
+        <!-- Left Section -->
+        <textarea id="code" name="code">
+#include "wasm.h"
+
+int main()
+{
+    printf("Hello Wasm!\n");
+    return 0;
+}</textarea>
+        <div class="resizer" data-direction="horizontal"></div>
+        <div class="container__right">
+            <!-- Top Right Section -->
+            <div class="container__top">Top</div>
+            <div class="resizer" data-direction="vertical"></div>
+            <!-- Bottom Right Section -->
+            <div class="container__bottom">
+                <textarea id="terminal" style="width: 200%; height: 100%; resize: none; font-family: 'Courier New', monospace;" readonly></textarea>
+            </div>
+        </div>
+    </div>
+    </divs>
+</body>
+
+</html>
