@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const w =
                         ((prevSiblingWidth + dx) * 100) / resizer.parentNode.getBoundingClientRect().width;
                     prevSibling.style.width = w + '%';
-                    floater.style.left = w - 3 + '%'
+                    floater.style.left = `calc(${w-3}% + 5px)`
                     dbgline.style.width = w - 10 + '%'
                     break;
             }

@@ -19,27 +19,41 @@ wasm_worker.onmessage = (message) => {
         console.log(data.data)
     }
     else if (command == "PAUSE") {
-        contBttonColor("orange")
+
+        cursorSet(cont_bttn, "pointer")
+
+        bttonColor(cont_bttn, "orange")
 
         var lineNo = data.data
         stepLineShow(lineNo)
 
-        cursorSet("default")
+        cursorSet(document.body, "default")
     }
     else if (command == "COMPILE_START") {
         console.log("::: Compiling...\n")
-        cursorSet("wait")
+        cursorSet(document.body, "wait")
     }
     else if (command == "COMPILE_DONE") {
         console.log("::: Running...\n")
-        cursorSet("default")
+
+        cursorSet(document.body, "default")
+        cursorSet(play_bttn, "not-allowed")
+        bttonColor(play_bttn, "lightgray")
+
         program_running = true
     }
     else if (command == "PROGRAM_EXIT")
     {
+        cursorSet(cont_bttn, "not-allowed")
+
         console.log("::: Exited!\n")
-        cursorSet("default")
+
+        cursorSet(document.body, "default")
+        cursorSet(play_bttn, "pointer")
+        bttonColor(play_bttn, "lightgreen")
+
         stepLineHide()
+
         program_running = false
     }
     else 
@@ -54,6 +68,8 @@ function formatCommand(command, info) {
 
 function compile() {
     const textContent = editor.doc.getValue().split("\n")
+
+    terminal.value = ""
 
     wasm_worker.postMessage(formatCommand("COMPILE", { textContent }))
 }
