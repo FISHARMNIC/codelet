@@ -12,3 +12,12 @@ C visualization tool
 * Learning mode with hands on activities
 * UI and speed improvements
 * Offloading from local server to either external on running emcc in the browser itself
+
+## Installation
+### Dependencies
+* [emcc](https://emscripten.org/docs/getting_started/downloads.html)
+* [node](https://nodejs.org/en/download)
+    * [serve-static](https://www.npmjs.com/package/serve-static)
+    * [finalhandler](https://www.npmjs.com/package/finalhandler)
+
+Then just run `node main` in the `server` folder and navigate to `localhost:8080`
