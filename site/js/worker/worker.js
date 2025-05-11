@@ -35,14 +35,13 @@ function formatPost(command, data) {
 //#endregion
 
 //#region msg.js
-function sendCommand(command, info)
-{
-    postMessage({command, ...info})
+function sendCommand(command, info) {
+    postMessage({ command, ...info })
 }
 
 const saved_console_log = console.log
 
-console.log = (...args) => sendCommand("PRINT", {data: args})
+console.log = (...args) => sendCommand("PRINT", { data: args })
 //#endregion
 
 //#region wasm.js
@@ -61,36 +60,35 @@ var env = {
     console_string: (char_p) => {
         //console.log(char_p)
         console.log(read_wasm_string(char_p));
-    }, 
+    },
     __wasm_break__: async function (lineNo) {
 
 
         //console.log("== Breakpoint Called! ==\n");
 
-        var new_memory = Array.from(new Uint8Array(wasm.memory.buffer))
+        var new_memory = Array.from(new Uint8Array(wasm.memory.buffer, care_region.min, care_region.size))
 
-        if (memory_snapshot.length != 0) {
-            compare_memory(memory_snapshot, new_memory)
-        }
+        var res = compare_memory(memory_snapshot, new_memory)
+
+        sendCommand("MEMORY", { mem: res })
 
         memory_snapshot = new_memory
 
+
         console.log(`\nPaused after line ${lineNo}\n`)
 
-        postMessage({command: "PAUSE", data: lineNo})
-        
+        postMessage({ command: "PAUSE", data: lineNo })
+
         await dbg_wait()
     },
-    __give_section_info__: function(data, bss, rodata)
-    {
-        section_info = {data, bss, rodata}
+    __give_section_info__: function (data, bss, rodata) {
+        section_info = { data, bss, rodata }
         care_region.min = Math.min(data, bss, rodata)
         care_region.max = Math.max(data, bss, rodata) + 1000
         care_region.size = care_region.max - care_region.min
         //console.log(section_info)
     },
-    __program_finished__: function()
-    {
+    __program_finished__: function () {
         sendCommand("PROGRAM_EXIT")
     },
     console_double: console.log,
@@ -112,11 +110,26 @@ function read_wasm_string(base) {
 
 function compare_memory(old_mem, new_mem) {
     //console.log("comparing", old_mem.size)
-    for (var i = care_region.min; i < care_region.max; i++) {
+
+    if (old_mem.length == 0) {
+        return new_mem.map(x => x.toString().padStart(3, "0")).join(" ")
+    }
+
+    var out = ""
+
+    for (var i = 0; i < care_region.size; i++) {
+        var trueAddr = i + care_region.min
         if (old_mem[i] != new_mem[i]) {
-            console.log(`CHANGE @Memory[${i}] : ${old_mem[i]} ==> ${new_mem[i]}\n`)
+            console.log(`\nCHANGE @Memory[${trueAddr}] : ${old_mem[i]} ==> ${new_mem[i]}\n`)
+            out += `<span id="scrollInto" style="background-color:orange;">${new_mem[i].toString().padStart(3, "0")}</span> `
+        } else {
+            out += new_mem[i].toString().padStart(3, "0") + " "
         }
     }
+
+    return out
+
+    //sendCommand("MEMORY", {mem: new_mem})
     //console.log("done")
 }
 //#endregion
@@ -125,8 +138,7 @@ function compare_memory(old_mem, new_mem) {
 function waitEv(event) {
     return new Promise((resolve) => {
         self.onmessage = (event) => {
-            if(event.data == "CONT")
-            {
+            if (event.data == "CONT") {
                 self.onmessage = normal_handler
                 resolve(event.data)
             }
@@ -145,28 +157,27 @@ async function dbg_wait() {
 
 import * as Asyncify from 'https://unpkg.com/asyncify-wasm?module';
 
-async function run(data)
-{
+async function run(data) {
     var textContent = data.textContent
-        sendCommand("COMPILE_START")
-        send(formatPost("compile", textContent), (out) => {
-            //terminal.value += out.out
-            wasm_bin = new Uint8Array(out.bin.data).buffer
+    sendCommand("COMPILE_START")
+    send(formatPost("compile", textContent), (out) => {
+        //terminal.value += out.out
+        wasm_bin = new Uint8Array(out.bin.data).buffer
 
 
-            WebAssembly.compile(wasm_bin)
-                .then(module => Asyncify.instantiate(module, { env }))
-                .then(instance => instance.exports)
-                .then(async exports => {
-                    sendCommand("COMPILE_DONE")
-                    wasm.instance = exports
-                    wasm.memory = exports.memory
-                    
-                    //saved_console_log(wasm.memory)
-                    await wasm.instance.start()
-    
-                })
-        })
+        WebAssembly.compile(wasm_bin)
+            .then(module => Asyncify.instantiate(module, { env }))
+            .then(instance => instance.exports)
+            .then(async exports => {
+                sendCommand("COMPILE_DONE")
+                wasm.instance = exports
+                wasm.memory = exports.memory
+
+                //saved_console_log(wasm.memory)
+                await wasm.instance.start()
+
+            })
+    })
 }
 
 self.onmessage = (event) => {
@@ -174,11 +185,9 @@ self.onmessage = (event) => {
     const command = data.command
 
     //console.log("------ GOT ------")
-    if(command == "COMPILE")
-    {
+    if (command == "COMPILE") {
         run(data)
-    }else 
-    {
+    } else {
         console.log(`Unknown command ${command}`)
     }
 }

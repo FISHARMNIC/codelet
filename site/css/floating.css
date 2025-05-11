@@ -16,6 +16,19 @@
     opacity: 0.7;
     z-index: 10;
 }
+
+#memory
+{
+        line-height: 20px;
+        border: 1px solid black;
+        /* font: medium -moz-fixed; */
+        /* //font: -webkit-small-control; */
+        height: 200px;
+        overflow: auto;
+        padding: 2px;
+        resize: none;
+        width: 495.5px;
+}
 /* 
 .pausebar
 {

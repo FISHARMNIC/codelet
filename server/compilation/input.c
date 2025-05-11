@@ -1,21 +1,20 @@
 #include "wasm.h"
 
-char* p = "Apples\n";
+char buffer[10];
 
 int main()
 {
 __wasm_break__(6);
 
-    *p = 'M';
-__wasm_break__(7);
-
-    *(p+1) = 'a';
+    for(int i = 0; i < 10; i++)
+    {
 __wasm_break__(8);
 
-    console_string(p);
+        buffer[i] = i + 1;
 __wasm_break__(9);
 
+    }
     return 0;
-__wasm_break__(10);
+__wasm_break__(11);
 
 }

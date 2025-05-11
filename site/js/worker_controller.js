@@ -11,6 +11,7 @@ wasm_worker.onerror = (e) => {
 }
 
 var program_running = false
+var datamap;
 
 wasm_worker.onmessage = (message) => {
     var data = message.data
@@ -55,6 +56,27 @@ wasm_worker.onmessage = (message) => {
         stepLineHide()
 
         program_running = false
+    }
+    else if (command == "MEMORY")
+    {
+        // if(data.new)
+        // {
+        //     var dupe = datamap.slice()
+        //     for(change in data.mem)
+        //     {
+        //         datamap[change.index] = change.value
+        //         dupe[change.index] = `<span style="background-color:${col};">${x}</span>`
+        //     }
+        // }
+        // else
+        // {
+        //     datamap = data.mem
+        //     memory.innerHTML = datamap.map(item => item.toString().padStart(3, "0")).join(" ")
+        // }
+        // memory.innerHTML = data.mem.map(item => item.toString().padStart(3, "0")).join(" ")
+
+        memory.innerHTML = data.mem
+        document.getElementById("scrollInto")?.scrollIntoView()
     }
     else 
     {

@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     const w =
                         ((prevSiblingWidth + dx) * 100) / resizer.parentNode.getBoundingClientRect().width;
                     prevSibling.style.width = w + '%';
-                    floater.style.left = `calc(${w-3}% + 5px)`
+                    floater.style.left = (resizer.getBoundingClientRect().left - 33.5) + "px";
+                    //console.log(resizer.getBoundingClientRect().left)
                     dbgline.style.width = w - 10 + '%'
                     break;
             }
@@ -88,4 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.resizer').forEach(function (ele) {
         resizable(ele);
     });
+
+    floater.style.left = (document.getElementById("rhz").getBoundingClientRect().left - 33.5) + "px";
+
 });

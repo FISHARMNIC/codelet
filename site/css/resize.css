@@ -76,7 +76,7 @@ https://phuoc.ng/collection/html-dom/create-resizable-split-views/
 
 #floater {
     position: absolute;
-    left: calc(47% + 5px);
+    left: 47%;
     top: calc(var(--navbar-height) * 1vh + 5px);
     display: flex;
     flex-direction: column;

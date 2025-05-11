@@ -76,7 +76,8 @@ function setBreaks(code) {
                 inQuotes = true
                 quoteType = letter
             }
-            else if (letter + next + next2 == "for") {
+            else if ((letter + next + next2) == "for") {
+                console.log("OPENER")
                 waitingOpen = true
             }
             else if (letter == "(" && waitingOpen) {
@@ -89,7 +90,7 @@ function setBreaks(code) {
             else if (letter == "}") {
                 depth--
             }
-            else if ((letter == ";" || letter == "{") && depth > 0) {
+            else if ((letter == ";" || letter == "{") && depth > 0 && !waitingClose) {
                 split.push(build, `\n__wasm_break__(${lineNumber});\n`)
                 build = []
             }

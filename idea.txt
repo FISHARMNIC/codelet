@@ -1,2 +1,6 @@
 Shows pointers etc.
 Uses WASM
+
+todos:
+
+function callable in c like js_showstring() and the memory like highlights it

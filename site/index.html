@@ -76,23 +76,24 @@
         <textarea id="code" name="code">
 #include "wasm.h"
 
-char* p = "Apples\n";
+char buffer[10];
 
 int main()
 {
-    *p = 'M';
-    *(p+1) = 'a';
-    console_string(p);
+    for(int i = 0; i < 10; i++)
+    {
+        buffer[i] = i + 1;
+    }
     return 0;
 }</textarea>
         <!-- <div class="floater">hello</div> -->
-        <div class="resizer" data-direction="horizontal"></div>
+        <div class="resizer" id="rhz" data-direction="horizontal"></div>
         <div class="container__right">
             <!-- Top Right Section -->
             <div class="container__top">
-                <textarea id="memory"
+                <div id="memory"
                     style="background-color: var(--env-light); color: black; width: 200%; height: 99%; resize: none; font-family: 'Courier New', monospace;"
-                    readonly></textarea>
+                    readonly></div>
             </div>
             <div class="resizer" data-direction="vertical"></div>
             <!-- Bottom Right Section -->
@@ -106,7 +107,8 @@ int main()
     <div id="floater">
         <i style="color:greenyellow" id="dbg_play" class="fa fa-play" aria-hidden="true" onclick="compile()"></i>
         <i style="color:lightgray" id="dbg_pause" class="fa fa-pause" aria-hidden="true"></i>
-        <i style="color:lightgray" id="dbg_continue" class="fa fa-step-forward" aria-hidden="true" onclick="dbg_continue()"></i>
+        <i style="color:lightgray" id="dbg_continue" class="fa fa-step-forward" aria-hidden="true"
+            onclick="dbg_continue()"></i>
     </div>
     </div>
 </body>
