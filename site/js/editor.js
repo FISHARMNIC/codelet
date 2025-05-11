@@ -12,8 +12,12 @@ const editor = CodeMirror.fromTextArea(textarea, {
         rangeFinder: CodeMirror.fold.brace
     },
     foldGutter: true,
-    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    // gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], // disabled for now
     placeholder: 'Enter your C code here...',
 })
 
 editor.setSize(null, "100%");
+
+editor.on("scroll", () => {
+    stepLineSet(dbg_lineNo)
+})

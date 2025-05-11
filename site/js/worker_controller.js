@@ -4,14 +4,20 @@ Todo: only recompile if you modify the textarea
 
 */
 
+if (!Worker) {
+    window.alert("Browser does not support workers")
+}
+
 const wasm_worker = new Worker("js/worker/worker.js", { type: "module" })
 
 wasm_worker.onerror = (e) => {
     console.error("WORKER ERR", e)
+    window.alert("[INTERNAL] Worker failed to launch")
 }
 
 var program_running = false
 var datamap;
+var dbg_lineNo = 0;
 
 wasm_worker.onmessage = (message) => {
     var data = message.data
@@ -25,8 +31,8 @@ wasm_worker.onmessage = (message) => {
 
         bttonColor(cont_bttn, "orange")
 
-        var lineNo = data.data
-        stepLineShow(lineNo)
+        dbg_lineNo = data.data
+        stepLineShow(dbg_lineNo)
 
         cursorSet(document.body, "default")
     }
@@ -40,47 +46,45 @@ wasm_worker.onmessage = (message) => {
         cursorSet(document.body, "default")
         cursorSet(play_bttn, "not-allowed")
         bttonColor(play_bttn, "lightgray")
+        bttonColor(pause_bttn, "salmon")
 
         program_running = true
     }
-    else if (command == "PROGRAM_EXIT")
-    {
+    else if (command == "PROGRAM_EXIT") {
         cursorSet(cont_bttn, "not-allowed")
 
-        console.log("::: Exited!\n")
+        console.log("\n::: Exited!\n")
 
         cursorSet(document.body, "default")
         cursorSet(play_bttn, "pointer")
         bttonColor(play_bttn, "lightgreen")
+        bttonColor(pause_bttn, "lightgray")
 
         stepLineHide()
 
+        editor.options.readOnly = false
+
         program_running = false
     }
-    else if (command == "MEMORY")
-    {
-        // if(data.new)
-        // {
-        //     var dupe = datamap.slice()
-        //     for(change in data.mem)
-        //     {
-        //         datamap[change.index] = change.value
-        //         dupe[change.index] = `<span style="background-color:${col};">${x}</span>`
-        //     }
-        // }
-        // else
-        // {
-        //     datamap = data.mem
-        //     memory.innerHTML = datamap.map(item => item.toString().padStart(3, "0")).join(" ")
-        // }
-        // memory.innerHTML = data.mem.map(item => item.toString().padStart(3, "0")).join(" ")
-
+    else if (command == "MEMORY") {
         memory.innerHTML = data.mem
         document.getElementById("scrollInto")?.scrollIntoView()
     }
-    else 
-    {
+    else if (command == "MEMVIEW") {
+        if(data.mode == 0)
+        {
+            vb1.style.backgroundColor = "var(--env-dark)"
+            vb2.style.backgroundColor = "var(--env-medium)"
+        }
+        else
+        {
+            vb2.style.backgroundColor = "var(--env-dark)"
+            vb1.style.backgroundColor = "var(--env-medium)"
+        }
+    }
+    else {
         console.log("UNKOWN COMMAND", command)
+        stepLineShow(lineNo)
     }
 }
 
@@ -92,6 +96,8 @@ function compile() {
     const textContent = editor.doc.getValue().split("\n")
 
     terminal.value = ""
+
+    editor.options.readOnly = true
 
     wasm_worker.postMessage(formatCommand("COMPILE", { textContent }))
 }

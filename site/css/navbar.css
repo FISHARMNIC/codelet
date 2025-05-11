@@ -1,12 +1,13 @@
 ul {
+    color:white;
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     height: calc(var(--navbar-height) * 1vh);
     align-items: center;
-    display: flex;
-    justify-content: left;
+    display:flex;
+    /* justify-content: left; */
     height: calc(var(--navbar-height) * 1vh);
     background-color: var(--env-darkest);
 }
@@ -27,3 +28,11 @@ li a:hover
 {
     cursor:pointer;
 }
+/* 
+input[disabled][type="radio"]:checked::before {
+        content: "\25C9";
+        position: relative;
+        top:-2.7px;
+        z-index: 100;
+    } */
+    

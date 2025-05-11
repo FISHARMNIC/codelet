@@ -10,4 +10,5 @@ emcc --no-entry -O0 -o $D/output.wasm $D/libs/jsSCTNS.c $D/libs/jsIO.c $D/input.
 -s WARN_ON_UNDEFINED_SYMBOLS=0 \
 -s ASYNCIFY \
 -s ASYNCIFY_IMPORTS=['env.__wasm_break__'] \
--s EXPORTED_FUNCTIONS="['_main', '_start']"
+-s EXPORT_ALL=1
+# -s EXPORTED_FUNCTIONS="['_main', '_start']"

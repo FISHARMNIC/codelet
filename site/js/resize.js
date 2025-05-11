@@ -91,5 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     floater.style.left = (document.getElementById("rhz").getBoundingClientRect().left - 33.5) + "px";
-
+    window.addEventListener("resize", (e) => {
+        floater.style.left = (document.getElementById("rhz").getBoundingClientRect().left - 33.5) + "px";
+    })
 });

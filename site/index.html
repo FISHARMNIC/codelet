@@ -67,8 +67,23 @@
     <div>
 
         <ul>
-            <li><a onclick="compile()">Run</a></li>
+            <li><i class="fa fa-file-code-o" aria-hidden="true"></i></li>
+            <li><i class="fa fa-floppy-o" aria-hidden="true"></i></li>
+            <li style="margin-left: auto !important; order: 2; margin-right: 10px;">
+                <div style="display: inline-block !important; justify-content: center;">
+                    <label style="float: left; padding-right: 20px;">Memory mode </label>
+                <!-- <input type="radio" id="bttn_setview1" name="memmode" checked="checked"disabled> -->
+                    <!-- <input type="radio" id="bttn_setview2" name="memmode", disabled> -->
+                     <div style="border: 1px solid white; float:right">
+                    <label id="mem_text_dump" style="background-color: var(--env-dark);">Dump</label>
+                    <label>|</label>
+                    <label id="mem_text_map">Map</label>
+                    </div>
+                </div>
+            </li>
+
         </ul>
+
     </div>
     <div class="container">
         <!-- Left Section -->
@@ -77,9 +92,14 @@
 #include "wasm.h"
 
 char buffer[10];
+char hello[] = "Hello!";
 
 int main()
 {
+    js_memview(MODE_MAP);
+    js_addview(buffer, 10, AS_BYTES);
+    js_addview(hello, 6, AS_CHARS);
+
     for(int i = 0; i < 10; i++)
     {
         buffer[i] = i + 1;
@@ -105,10 +125,12 @@ int main()
         </div>
     </div>
     <div id="floater">
-        <i style="color:greenyellow" id="dbg_play" class="fa fa-play" aria-hidden="true" onclick="compile()"></i>
-        <i style="color:lightgray" id="dbg_pause" class="fa fa-pause" aria-hidden="true"></i>
-        <i style="color:lightgray" id="dbg_continue" class="fa fa-step-forward" aria-hidden="true"
-            onclick="dbg_continue()"></i>
+        <i title="Run the debugger" style="color:greenyellow" id="dbg_play" class="fa fa-play" aria-hidden="true"
+            onclick="compile()"></i>
+        <i title="Unpause the program and run without stepping" style="color:lightgray" id="dbg_pause"
+            class="fa fa-pause" aria-hidden="true"></i>
+        <i title="Step to the next line" style="color:lightgray" id="dbg_continue" class="fa fa-step-forward"
+            aria-hidden="true" onclick="dbg_continue()"></i>
     </div>
     </div>
 </body>

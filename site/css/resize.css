@@ -82,8 +82,8 @@ https://phuoc.ng/collection/html-dom/create-resizable-split-views/
     flex-direction: column;
     background: var(--env-dark);
     border-radius: 5px;
-    border-top-right-radius:0px;
-    border-bottom-right-radius:0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
     color: white;
     padding: 10px;
     z-index: 10;
@@ -94,6 +94,17 @@ i {
     padding-bottom: 10px;
 }
 
-i:hover{
-    cursor: pointer ;
+i:hover {
+    cursor: pointer;
+}
+
+.vbar {
+    background-color: black;
+    background-size: 2px auto;
+}
+
+.paddedBoxes {
+    border-right: 1px solid black;
+    padding-right: 4px;
+    padding-left: 4px;
 }

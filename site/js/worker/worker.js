@@ -45,11 +45,23 @@ console.log = (...args) => sendCommand("PRINT", { data: args })
 //#endregion
 
 //#region wasm.js
+
 var wasm_bin
 var wasm = {}
 var memory_snapshot = []
 var section_info = {}
 var care_region = {}
+
+var memory_views = []
+var mem_padlen = 0
+var memory_mode = 0
+
+var asmodes = {
+    AS_BYTES: 1,
+    AS_SHORTS: 2,
+    AS_WORDS: 3,
+    AS_CHARS: 4
+};
 
 var env = {
     memory: new WebAssembly.Memory({
@@ -91,6 +103,22 @@ var env = {
     __program_finished__: function () {
         sendCommand("PROGRAM_EXIT")
     },
+    js_focuson: function (addr, amount) {
+
+    },
+    js_memview(mode) {
+        memory_mode = mode
+        sendCommand("MEMVIEW", {mode})
+    },
+    __js_addview__: function (name, address, size, mode) {
+        name = read_wasm_string(name)
+        memory_views.push({ name: name, address, size, mode})
+        if(name.length > mem_padlen)
+        {
+            mem_padlen = name.length
+        }
+        console.log("views", memory_views)
+    },
     console_double: console.log,
     console_int: console.log,
     console_char: (c) => console.log(String.fromCharCode(c)),
@@ -111,24 +139,64 @@ function read_wasm_string(base) {
 function compare_memory(old_mem, new_mem) {
     //console.log("comparing", old_mem.size)
 
-    if (old_mem.length == 0) {
-        return new_mem.map(x => x.toString().padStart(3, "0")).join(" ")
-    }
-
     var out = ""
 
-    for (var i = 0; i < care_region.size; i++) {
-        var trueAddr = i + care_region.min
-        if (old_mem[i] != new_mem[i]) {
-            console.log(`\nCHANGE @Memory[${trueAddr}] : ${old_mem[i]} ==> ${new_mem[i]}\n`)
-            out += `<span id="scrollInto" style="background-color:orange;">${new_mem[i].toString().padStart(3, "0")}</span> `
-        } else {
-            out += new_mem[i].toString().padStart(3, "0") + " "
+    if (memory_mode == 0) {
+
+        if (old_mem.length == 0) {
+            return new_mem.map(x => x.toString().padStart(3, "0")).join(" ")
         }
+
+        for (var i = 0; i < care_region.size; i++) {
+            var trueAddr = i + care_region.min
+            if (old_mem[i] != new_mem[i]) {
+                console.log(`\nCHANGE @Memory[${trueAddr}] : ${old_mem[i]} ==> ${new_mem[i]}\n`)
+                out += `<span id="scrollInto" style="background-color:orange;">${new_mem[i].toString().padStart(3, "0")}</span> `
+            } else {
+                out += new_mem[i].toString().padStart(3, "0") + " "
+            }
+        }
+    }
+    else {
+        memory_views.forEach(view => {
+            var start_addr = view.address - care_region.min
+            var end_addr = view.size + start_addr
+            saved_console_log(new_mem.slice(start_addr, end_addr))
+
+            var sbuffer = new_mem.slice(start_addr, end_addr).map((x,i) => {
+                var trueAddr = start_addr + i
+
+                var padded;
+
+                if(view.mode == asmodes.AS_CHARS)
+                {
+                    padded = String.fromCharCode(x)
+                }
+                else
+                {
+                    if(view.mode != asmodes.AS_BYTES)
+                    {
+                        console.log(`NOTE: only AS_CHARS and AS_BYTES currently supported. Treating as AS_BYTES`)
+                    }
+                    padded = x.toString().padStart(3, "0")
+                }
+
+                padded = `<span class='paddedBoxes' ">${padded}</span>`
+
+                if(old_mem[trueAddr] != new_mem[trueAddr])
+                {
+                    console.log(`\nCHANGE @Memory[${trueAddr + care_region.min}] : ${old_mem[trueAddr]} ==> ${old_mem[trueAddr]}\n`)
+                    padded = `<span id="scrollInto" style="background-color:orange;">${padded}</span>`
+                }
+
+                return padded
+            }).join("")
+
+            out += `${view.name.padEnd(mem_padlen + 2, "\xa0")}: <span style="border: 1px solid black; border-right:none;">${sbuffer}</span><br><br>`
+        })
     }
 
     return out
-
     //sendCommand("MEMORY", {mem: new_mem})
     //console.log("done")
 }
@@ -180,12 +248,18 @@ async function run(data) {
     })
 }
 
+function reset()
+{
+    memory_views = []
+}
+
 self.onmessage = (event) => {
     const data = event.data
     const command = data.command
 
     //console.log("------ GOT ------")
     if (command == "COMPILE") {
+        reset()
         run(data)
     } else {
         console.log(`Unknown command ${command}`)

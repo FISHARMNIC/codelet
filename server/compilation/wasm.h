@@ -6,8 +6,20 @@
 
 #include <emscripten.h>
 
-__attribute__((import_module("env")))
-__attribute__((import_name("__wasm_break__")))
-
 extern void __wasm_break__(int arg);
+extern void __js_addview__(const char* name, void* addr, int bytes, int mode);
+extern void js_memview(int);
+
+#define MODE_DUMP 0
+#define MODE_MAP 1
+
+enum {
+    AS_BYTES = 1,
+    AS_SHORTS,
+    AS_WORDS,
+    AS_CHARS
+};
+
+#define js_addview(variable, bytes, disp) __js_addview__(#variable, &variable, bytes, disp)
+
 #endif
