@@ -91,7 +91,7 @@ var env = {
     },
     __program_finished__: function()
     {
-        
+        sendCommand("PROGRAM_EXIT")
     },
     console_double: console.log,
     console_int: console.log,
@@ -125,7 +125,11 @@ function compare_memory(old_mem, new_mem) {
 function waitEv(event) {
     return new Promise((resolve) => {
         self.onmessage = (event) => {
-            resolve(event.data)
+            if(event.data == "CONT")
+            {
+                self.onmessage = normal_handler
+                resolve(event.data)
+            }
         };
     });
 }
@@ -178,3 +182,5 @@ self.onmessage = (event) => {
         console.log(`Unknown command ${command}`)
     }
 }
+
+var normal_handler = self.onmessage
