@@ -1,6 +1,7 @@
 .CodeMirror {
     width: 50%;
     height: 100%;
+    line-height: 1.5;
 }
 
 .CodeMirror .CodeMirror-placeholder {

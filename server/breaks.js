@@ -26,6 +26,8 @@ function setBreaks(code) {
     var waitingOpen = false
     var waitingClose = false
 
+    var lineNumber = 1
+
     var depth = 0
 
     code = code.split("")
@@ -35,6 +37,11 @@ function setBreaks(code) {
         var next3 = code[i + 3]
 
         build.push(letter)
+
+        if(letter == "\n")
+        {
+            lineNumber++
+        }
 
         if (inComment) {
             if ((commentType == "line" && letter == "\n") || (commentType == "multi" && letter == "*" && next == "/")) {
@@ -83,7 +90,7 @@ function setBreaks(code) {
                 depth--
             }
             else if ((letter == ";" || letter == "{") && depth > 0) {
-                split.push(build, "\n__wasm_break__();\n")
+                split.push(build, `\n__wasm_break__(${lineNumber});\n`)
                 build = []
             }
         }

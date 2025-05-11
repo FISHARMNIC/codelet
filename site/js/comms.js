@@ -15,39 +15,3 @@ function get(command) {
     }
     return xhr.responseText
 }
-
-function send(string, next) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", site, false);
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          const status = xhr.status;
-          if (status != 200) {
-            terminal.value += "Post failed\n"
-          } 
-          else
-          {
-            
-            var out = JSON.parse(xhr.responseText);
-            if(out.success)
-            {
-                next(out.data)
-            } 
-            else
-            {
-                terminal.value += "=== Compilation error ===\n" + out.data
-
-            }
-          }
-        }
-      };
-
-    xhr.send(string);
-}
-
-function formatPost(command, data)
-{
-    return JSON.stringify({command, data})
-}

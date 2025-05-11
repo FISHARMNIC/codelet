@@ -3,6 +3,8 @@ All credit for the split-screen to Phuoc Nguyen:
 https://phuoc.ng/collection/html-dom/create-resizable-split-views/
 */
 
+var floater = document.getElementById("floater")
+
 document.addEventListener('DOMContentLoaded', function () {
     const resizable = function (resizer) {
         const direction = resizer.getAttribute('data-direction') || 'horizontal';
@@ -47,6 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     const w =
                         ((prevSiblingWidth + dx) * 100) / resizer.parentNode.getBoundingClientRect().width;
                     prevSibling.style.width = w + '%';
+                    floater.style.left = w - 3 + '%'
+                    dbgline.style.width = w - 10 + '%'
                     break;
             }
 

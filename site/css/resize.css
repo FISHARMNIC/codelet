@@ -11,18 +11,21 @@ https://phuoc.ng/collection/html-dom/create-resizable-split-views/
     width: 100%;
     height: calc((100 - var(--navbar-height)) * 1vh);
 }
+
 .resizer[data-direction='horizontal'] {
     background-color: #cbd5e0;
     cursor: ew-resize;
     height: 100%;
-    width: 2px;
+    width: 5px;
 }
+
 .resizer[data-direction='vertical'] {
     background-color: #cbd5e0;
     cursor: ns-resize;
-    height: 2px;
+    height: 5px;
     width: 100%;
 }
+
 .container__left {
     /* Initially, the left takes 1/4 width */
     width: 25%;
@@ -47,6 +50,7 @@ https://phuoc.ng/collection/html-dom/create-resizable-split-views/
     justify-content: center;
 
 }
+
 .container__top {
     /* Initial height */
     height: 70%;
@@ -55,8 +59,10 @@ https://phuoc.ng/collection/html-dom/create-resizable-split-views/
     align-items: center;
     display: flex;
     justify-content: center;
+    width: 100%;
 
 }
+
 .container__bottom {
     /* Take the remaining height */
     flex: 1;
@@ -66,4 +72,28 @@ https://phuoc.ng/collection/html-dom/create-resizable-split-views/
     display: flex;
     justify-content: stretch;
     width: 100%;
+}
+
+#floater {
+    position: absolute;
+    left: 47%;
+    top: calc(var(--navbar-height) * 1vh + 5px);
+    display: flex;
+    flex-direction: column;
+    background: var(--env-dark);
+    border-radius: 5px;
+    border-top-right-radius:0px;
+    border-bottom-right-radius:0px;
+    color: white;
+    padding: 10px;
+    z-index: 10;
+}
+
+i {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+i:hover{
+    cursor: pointer ;
 }

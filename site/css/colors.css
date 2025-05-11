@@ -1,10 +1,8 @@
-.bg-env
-{
+.bg-env {
     background-color: var(--env);
 }
 
-.fg-env
-{
+.fg-env {
     color: var(--env);
 }
 
@@ -14,5 +12,9 @@
     font-weight: 200;
     font-style: normal;
     font-variation-settings:
-      "wdth" 100;
-  }
+        "wdth" 100;
+}
+
+.hg-line {
+    background-color: #fffa91;
+}
