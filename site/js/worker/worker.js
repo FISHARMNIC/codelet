@@ -1,3 +1,22 @@
+var wasm_bin
+var wasm = {}
+var memory_snapshot = []
+var section_info = {}
+var care_region = {}
+
+var memory_views = []
+var mem_padlen = 0
+var memory_mode = 0
+
+var manualBreaks = false;
+
+var asmodes = {
+    AS_BYTES: 1,
+    AS_SHORTS: 2,
+    AS_WORDS: 3,
+    AS_CHARS: 4
+};
+
 //#region comms.js
 const site = self.location.origin
 
@@ -45,24 +64,6 @@ console.log = (...args) => sendCommand("PRINT", { data: args })
 //#endregion
 
 //#region wasm.js
-
-var wasm_bin
-var wasm = {}
-var memory_snapshot = []
-var section_info = {}
-var care_region = {}
-
-var memory_views = []
-var mem_padlen = 0
-var memory_mode = 0
-
-var asmodes = {
-    AS_BYTES: 1,
-    AS_SHORTS: 2,
-    AS_WORDS: 3,
-    AS_CHARS: 4
-};
-
 var env = {
     memory: new WebAssembly.Memory({
         initial: 1,
@@ -75,25 +76,22 @@ var env = {
     },
     __wasm_break__: async function (lineNo) {
 
-
+        var wasneg = lineNo < 0
+        lineNo = Math.abs(lineNo)
         //console.log("== Breakpoint Called! ==\n");
 
         var new_memory = Array.from(new Uint8Array(wasm.memory.buffer, care_region.min, care_region.size))
-
         var res = compare_memory(memory_snapshot, new_memory)
-
         sendCommand("MEMORY", { mem: res })
-
-        // saved_console_log(await wasm.instance.emscripten_stack_get_current())
-
         memory_snapshot = new_memory
-
 
         console.log(`\nPaused after line ${lineNo}\n`)
 
-        postMessage({ command: "PAUSE", data: lineNo })
+        if (!manualBreaks || wasneg) {
+            postMessage({ command: "PAUSE", data: lineNo })
 
-        await dbg_wait()
+            await dbg_wait()
+        }
     },
     __give_section_info__: function (stack, data, bss, rodata) {
         section_info = { stack, data, bss, rodata }
@@ -109,8 +107,8 @@ var env = {
     __program_finished__: function () {
         sendCommand("PROGRAM_EXIT")
     },
-    js_focuson: function (addr, amount) {
-
+    js_break: async function (lineNo) {
+        await env.__wasm_break__(-lineNo)
     },
     js_memview(mode) {
         memory_mode = mode
@@ -273,17 +271,15 @@ function waitEv(event) {
             if (event.data == "CONT") {
                 self.onmessage = normal_handler
                 resolve(event.data)
+            } else if(event.data == "PAUSEMODE") {
+                manualBreaks = !manualBreaks
             }
         };
     });
 }
 
 async function dbg_wait() {
-    //console.log("Waiting")
-
     await waitEv("ev_dbg_cont")
-
-    //console.log("done")
 }
 //#endregion
 
@@ -314,6 +310,8 @@ async function run(data) {
 }
 
 function reset() {
+    manualBreaks = false
+    memory_mode = 0
     memory_views = []
 }
 

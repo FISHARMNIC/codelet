@@ -27,9 +27,7 @@ wasm_worker.onmessage = (message) => {
     }
     else if (command == "PAUSE") {
 
-        cursorSet(cont_bttn, "pointer")
-
-        bttonColor(cont_bttn, "orange")
+        enableBttn(cont_bttn, "orange")
 
         dbg_lineNo = data.data
         stepLineShow(dbg_lineNo)
@@ -44,27 +42,28 @@ wasm_worker.onmessage = (message) => {
         console.log("::: Running...\n")
 
         cursorSet(document.body, "default")
-        cursorSet(play_bttn, "not-allowed")
-        bttonColor(play_bttn, "lightgray")
-        bttonColor(pause_bttn, "salmon")
+
+        disableBttn(play_bttn)
+        enableBttn(pause_bttn, "salmon")
+
+        pause_bttn.className = "fa fa-pause"
 
         program_running = true
     }
     else if (command == "PROGRAM_EXIT" || command == "COMPFAIL" || command == "POSTFAIL") {
-        cursorSet(cont_bttn, "not-allowed")
-
+        
         console.log("\n::: Exited!\n")
 
+        disableBttn(cont_bttn)
         cursorSet(document.body, "default")
-        cursorSet(play_bttn, "pointer")
-        bttonColor(play_bttn, "lightgreen")
-        bttonColor(pause_bttn, "lightgray")
+        enableBttn(play_bttn, "lightgreen")
+        disableBttn(pause_bttn)
 
         stepLineHide()
 
         editor.options.readOnly = false
-
         program_running = false
+        pause_bttn.className = "fa fa-pause"
 
         if (command == "POSTFAIL") {
             window.alert("Error: could not connect/post to server")

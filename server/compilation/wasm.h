@@ -8,7 +8,8 @@
 
 extern void __wasm_break__(int arg);
 extern void __js_addview__(const char* name, void* addr, int bytes, int mode);
-extern void js_memview(int);
+extern void js_memview(int type);
+extern void js_break(int line);
 
 #define MODE_DUMP 0
 #define MODE_MAP 1

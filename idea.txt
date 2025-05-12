@@ -7,10 +7,12 @@ function callable in c like js_showstring() and the memory like highlights it
 
 errors in compiler dont unlock editor
 
-siders/numbers to set memory inspection size
+sliders/numbers to set memory inspection size
 
 use fly.io for server?
 
 maybe padd @addr correctly in MODE_MAP (expects all addrs to be of same size)
 
 Mode to only manually insert breakpoints where needed
+
+Maybe use c++ (em++) for arduino sim lessons

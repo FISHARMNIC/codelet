@@ -24,6 +24,18 @@ function bttonColor(b, c) {
     b.style.color = c
 }
 
+function disableBttn(b, c = "lightgray")
+{
+    bttonColor(b, c)
+    cursorSet(b, "not-allowed")
+}
+
+function enableBttn(b, c = "lightgreen")
+{
+    bttonColor(b, c)
+    cursorSet(b, "pointer")
+}
+
 function stepLineSet(lineNo)
 {
     dbgline.style.top = editor.charCoords({ line: lineNo }).top + "px"
