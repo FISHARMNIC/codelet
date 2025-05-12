@@ -282,7 +282,7 @@ function compare_memory(old_mem, new_mem) {
                     return padded
                 }).join("")
 
-                out += `${view.name.padEnd(mem_padlen, "\xa0")} @${view.address} :<span style="border: 1px solid black; border-right:none;">${sbuffer}</span><br><br>`
+                out += `${view.name.padEnd(mem_padlen, "\xa0")} @${view.address} : <span style="border: 1px solid black; border-right:none;">${sbuffer}</span><br><br>`
             })
         }
     }
