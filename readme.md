@@ -23,3 +23,6 @@ C visualization tool
 * `npm install` 
 * `npm run build`
 * Navigate to `http://localhost:8080`
+
+## Credits
+All credit for the split-screen and resizing goes to [Phuoc Nguyen](https://phuoc.ng/collection/html-dom/create-resizable-split-views/)

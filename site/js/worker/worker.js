@@ -117,6 +117,15 @@ var env = {
         sendCommand("MEMVIEW", { mode })
     },
     __js_addview__: function (name, address, size, mode) {
+        if(mode == asmodes.AS_SHORTS)
+        {
+            size *= 2
+        }
+        else if(mode == asmodes.AS_WORDS)
+        {
+            size *= 4
+        }
+        
         name = read_wasm_string(name)
         memory_views.push({ name: name, address, size, mode })
         if (name.length > mem_padlen) {

@@ -20,6 +20,6 @@ enum {
     AS_CHARS
 };
 
-#define js_addview(variable, bytes, disp) __js_addview__(#variable, &variable, bytes, disp)
+#define js_addview(variable, size, disp) __js_addview__(#variable, &variable, size, disp)
 
 #endif

@@ -15,7 +15,7 @@ __wasm_break__(8);
 __wasm_break__(10);
 
     
-    js_addview(i, 4, AS_WORDS);
+    js_addview(i, 1, AS_WORDS);
 __wasm_break__(12);
 
     js_addview(buffer, 10, AS_BYTES);
