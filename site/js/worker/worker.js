@@ -1,3 +1,4 @@
+// #region globals
 var wasm_bin
 var wasm = {}
 var memory_snapshot = []
@@ -8,32 +9,33 @@ var memory_views = []
 var mem_padlen = 0
 var memory_mode = 0
 
-var manualBreaks = false;
+var manualBreaks = false
 
 var asmodes = {
     AS_BYTES: 1,
     AS_SHORTS: 2,
     AS_WORDS: 3,
     AS_CHARS: 4
-};
+}
+// #endregion
 
 //#region comms.js
 const site = self.location.origin
 
 function send(string, next) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", site, false);
-    xhr.setRequestHeader("Content-Type", "application/json");
+    const xhr = new XMLHttpRequest()
+    xhr.open("POST", site, false)
+    xhr.setRequestHeader("Content-Type", "application/json")
 
     xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            const status = xhr.status;
+            const status = xhr.status
             if (status != 200) {
                 sendCommand("POSTFAIL")
             }
             else {
 
-                var out = JSON.parse(xhr.responseText);
+                var out = JSON.parse(xhr.responseText)
                 if (out.success) {
                     next(out.data)
                 }
@@ -43,9 +45,9 @@ function send(string, next) {
                 }
             }
         }
-    };
+    }
 
-    xhr.send(string);
+    xhr.send(string)
 }
 
 function formatPost(command, data) {
@@ -63,7 +65,7 @@ const saved_console_log = console.log
 console.log = (...args) => sendCommand("PRINT", { data: args })
 //#endregion
 
-//#region wasm.js
+//#region env
 var env = {
     memory: new WebAssembly.Memory({
         initial: 1,
@@ -72,13 +74,13 @@ var env = {
 
     console_string: (char_p) => {
         //console.log(char_p)
-        console.log(read_wasm_string(char_p));
+        console.log(read_wasm_string(char_p))
     },
     __wasm_break__: async function (lineNo) {
 
         var wasneg = lineNo < 0
         lineNo = Math.abs(lineNo)
-        //console.log("== Breakpoint Called! ==\n");
+        //console.log("== Breakpoint Called! ==\n")
 
         var new_memory = Array.from(new Uint8Array(wasm.memory.buffer, care_region.min, care_region.size))
         var res = compare_memory(memory_snapshot, new_memory)
@@ -154,17 +156,19 @@ var env = {
     console_int: console.log,
     console_char: (c) => console.log(String.fromCharCode(c)),
 }
+// #endregion
 
+// #region wasm utils
 function read_wasm_string(base) {
     const memsz = wasm.memory.buffer.byteLength
 
-    const strBuf = new Uint8Array(wasm.memory.buffer, base);
+    const strBuf = new Uint8Array(wasm.memory.buffer, base)
 
-    var i = 0;
+    var i = 0
     while (strBuf[i] != 0 && i < memsz)
         i++
 
-    return new TextDecoder().decode(strBuf).slice(0, i);
+    return new TextDecoder().decode(strBuf).slice(0, i)
 }
 
 function u8_to_u16(arr, i) {
@@ -174,7 +178,6 @@ function u8_to_u16(arr, i) {
 function u8_to_u32(arr, i) {
     return arr[i] | (arr[i + 1] << 8) | (arr[i + 2] << 16) | (arr[i + 3] << 24)
 }
-
 
 function compare_memory(old_mem, new_mem) {
     //console.log("comparing", old_mem.length)
@@ -211,7 +214,7 @@ function compare_memory(old_mem, new_mem) {
                 var sbuffer = sliced.map((x, i) => {
                     var trueAddr = start_addr + i
 
-                    var padded;
+                    var padded
 
                     var old_at = old_mem[trueAddr]
                     var new_at = new_mem[trueAddr]
@@ -232,7 +235,7 @@ function compare_memory(old_mem, new_mem) {
 
                                 new_at = num
 
-                                var negative = (num < 0) ? "-" : "";
+                                var negative = (num < 0) ? "-" : ""
                                 num = Math.abs(num)
 
                                 padded = negative + num.toString().padStart(5, "0")
@@ -249,7 +252,7 @@ function compare_memory(old_mem, new_mem) {
 
                                 new_at = num
 
-                                var negative = (num < 0) ? "-" : "";
+                                var negative = (num < 0) ? "-" : ""
                                 num = Math.abs(num)
 
                                 // yes this is horrible code. fix later
@@ -280,9 +283,16 @@ function compare_memory(old_mem, new_mem) {
     //sendCommand("MEMORY", {mem: new_mem})
     //console.log("done")
 }
+
+function reset() {
+    manualBreaks = false
+    memory_mode = 0
+    memory_views = []
+    memory_snapshot = []
+}
 //#endregion
 
-//#region dbg.js
+//#region debugger utils
 function waitEv(event) {
     return new Promise((resolve) => {
         self.onmessage = (event) => {
@@ -292,8 +302,8 @@ function waitEv(event) {
             } else if(event.data == "PAUSEMODE") {
                 manualBreaks = !manualBreaks
             }
-        };
-    });
+        }
+    })
 }
 
 async function dbg_wait() {
@@ -301,7 +311,8 @@ async function dbg_wait() {
 }
 //#endregion
 
-import * as Asyncify from 'https://unpkg.com/asyncify-wasm?module';
+// #region compiler and instantiator
+import * as Asyncify from 'https://unpkg.com/asyncify-wasm?module'
 
 async function run(data) {
     var textContent = data.textContent
@@ -326,14 +337,9 @@ async function run(data) {
             })
     })
 }
+// #endregion
 
-function reset() {
-    manualBreaks = false
-    memory_mode = 0
-    memory_views = []
-    memory_snapshot = []
-}
-
+// #region listener
 self.onmessage = (event) => {
     const data = event.data
     const command = data.command
@@ -348,3 +354,4 @@ self.onmessage = (event) => {
 }
 
 var normal_handler = self.onmessage
+// #endregion

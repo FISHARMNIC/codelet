@@ -5,7 +5,7 @@ const editor = CodeMirror.fromTextArea(textarea, {
     mode: 'text/x-csrc',
     // extraKeys: {
     //     "Tab": function(cm){
-    //         cm.replaceSelection("    " , "end");
+    //         cm.replaceSelection("    " , "end")
     //     }
     // },
     indentUnit: 4,
@@ -18,7 +18,7 @@ const editor = CodeMirror.fromTextArea(textarea, {
     placeholder: 'Enter your C code here...',
 })
 
-editor.setSize(null, "99%");
+editor.setSize(null, "99%")
 
 editor.on("scroll", () => {
     stepLineSet(dbg_lineNo)

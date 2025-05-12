@@ -4,6 +4,6 @@ console.log = function() {
     saved_console_log(...arguments)
     Array.from(arguments).forEach(arg => {
         terminal.value += arg
-        terminal.scrollTop = terminal.scrollHeight;
+        terminal.scrollTop = terminal.scrollHeight
     })
 }

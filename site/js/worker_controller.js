@@ -16,8 +16,8 @@ wasm_worker.onerror = (e) => {
 }
 
 var program_running = false
-var datamap;
-var dbg_lineNo = 0;
+var datamap
+var dbg_lineNo = 0
 
 wasm_worker.onmessage = (message) => {
     var data = message.data

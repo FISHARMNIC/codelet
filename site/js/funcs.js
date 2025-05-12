@@ -52,13 +52,13 @@ function stepLineHide() {
 
 filePicker.onchange = (e) => {
     // taken from: https://stackoverflow.com/questions/16215771/how-to-open-select-file-dialog-via-js
-    var file = e.target.files[0]; 
+    var file = e.target.files[0]
 
-    var reader = new FileReader();
-    reader.readAsText(file,'UTF-8');
+    var reader = new FileReader()
+    reader.readAsText(file,'UTF-8')
  
     reader.onload = readerEvent => {
-       var content = readerEvent.target.result;
+       var content = readerEvent.target.result
        editor.setValue(content)
     }
 }

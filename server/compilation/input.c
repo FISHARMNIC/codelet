@@ -38,12 +38,7 @@ __wasm_break__(22);
 __wasm_break__(23);
 
     }
-    
-    js_removeview(hello);
-__wasm_break__(26);
-
-    
     return 0;
-__wasm_break__(28);
+__wasm_break__(25);
 
 }
