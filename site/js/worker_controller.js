@@ -50,7 +50,7 @@ wasm_worker.onmessage = (message) => {
 
         program_running = true
     }
-    else if (command == "PROGRAM_EXIT") {
+    else if (command == "PROGRAM_EXIT" || command == "COMPFAIL" || command == "POSTFAIL") {
         cursorSet(cont_bttn, "not-allowed")
 
         console.log("\n::: Exited!\n")
@@ -65,19 +65,21 @@ wasm_worker.onmessage = (message) => {
         editor.options.readOnly = false
 
         program_running = false
+
+        if (command == "POSTFAIL") {
+            window.alert("Error: could not connect/post to server")
+        }
     }
     else if (command == "MEMORY") {
         memory.innerHTML = data.mem
-        document.getElementById("scrollInto")?.scrollIntoView()
+        document.getElementById("scrollInto")?.scrollIntoView({block: 'nearest', inline: 'start'})
     }
     else if (command == "MEMVIEW") {
-        if(data.mode == 0)
-        {
+        if (data.mode == 0) {
             vb1.style.backgroundColor = "var(--env-dark)"
             vb2.style.backgroundColor = "var(--env-medium)"
         }
-        else
-        {
+        else {
             vb2.style.backgroundColor = "var(--env-dark)"
             vb1.style.backgroundColor = "var(--env-medium)"
         }

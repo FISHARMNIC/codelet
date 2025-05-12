@@ -10,7 +10,7 @@ function send(string, next) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             const status = xhr.status;
             if (status != 200) {
-                terminal.value += "Post failed\n"
+                sendCommand("POSTFAIL")
             }
             else {
 
@@ -20,7 +20,7 @@ function send(string, next) {
                 }
                 else {
                     console.log("=== Compilation error ===\n" + out.data)
-
+                    sendCommand("COMPFAIL")
                 }
             }
         }
@@ -117,15 +117,13 @@ var env = {
         sendCommand("MEMVIEW", { mode })
     },
     __js_addview__: function (name, address, size, mode) {
-        if(mode == asmodes.AS_SHORTS)
-        {
+        if (mode == asmodes.AS_SHORTS) {
             size *= 2
         }
-        else if(mode == asmodes.AS_WORDS)
-        {
+        else if (mode == asmodes.AS_WORDS) {
             size *= 4
         }
-        
+
         name = read_wasm_string(name)
         memory_views.push({ name: name, address, size, mode })
         if (name.length > mem_padlen) {
@@ -184,77 +182,82 @@ function compare_memory(old_mem, new_mem) {
         }
     }
     else {
-        memory_views.forEach(view => {
-            var start_addr = view.address - care_region.min
-            var end_addr = view.size + start_addr
-            //saved_console_log(new_mem.slice(start_addr, end_addr))
+        if (memory_views.length == 0) {
+            out = 'Use "js_addview" to add slices!'
+        }
+        else {
+            memory_views.forEach(view => {
+                var start_addr = view.address - care_region.min
+                var end_addr = view.size + start_addr
+                //saved_console_log(new_mem.slice(start_addr, end_addr))
 
-            var sliced = new_mem.slice(start_addr, end_addr)
-            var sbuffer = sliced.map((x, i) => {
-                var trueAddr = start_addr + i
+                var sliced = new_mem.slice(start_addr, end_addr)
+                var sbuffer = sliced.map((x, i) => {
+                    var trueAddr = start_addr + i
 
-                var padded;
+                    var padded;
 
-                var old_at = old_mem[trueAddr]
-                var new_at = new_mem[trueAddr]
+                    var old_at = old_mem[trueAddr]
+                    var new_at = new_mem[trueAddr]
 
-                switch (view.mode) {
-                    case asmodes.AS_CHARS:
-                        padded = String.fromCharCode(x)
-                        break
+                    switch (view.mode) {
+                        case asmodes.AS_CHARS:
+                            padded = String.fromCharCode(x)
+                            break
 
-                    case asmodes.AS_BYTES:
-                        padded = x.toString().padStart(3, "0")
-                        break
+                        case asmodes.AS_BYTES:
+                            padded = x.toString().padStart(3, "0")
+                            break
 
-                    case asmodes.AS_SHORTS:
-                        if (i % 2 == 0) {
-                            var num = u8_to_u16(sliced, i)
-                            old_at = u8_to_u16(old_mem, trueAddr)
+                        case asmodes.AS_SHORTS:
+                            if (i % 2 == 0) {
+                                var num = u8_to_u16(sliced, i)
+                                old_at = u8_to_u16(old_mem, trueAddr)
 
-                            new_at = num
+                                new_at = num
 
-                            var negative = (num < 0) ? "-" : "";
-                            num = Math.abs(num)
+                                var negative = (num < 0) ? "-" : "";
+                                num = Math.abs(num)
 
-                            padded = negative + num.toString().padStart(5, "0")
-                        }
-                        else {
-                            return ""
-                        }
-                        break
+                                padded = negative + num.toString().padStart(5, "0")
+                            }
+                            else {
+                                return ""
+                            }
+                            break
 
-                    case asmodes.AS_WORDS:
-                        if (i % 4 == 0) {
-                            var num = u8_to_u32(sliced, i)
-                            old_at = u8_to_u32(old_mem, trueAddr)
+                        case asmodes.AS_WORDS:
+                            if (i % 4 == 0) {
+                                var num = u8_to_u32(sliced, i)
+                                old_at = u8_to_u32(old_mem, trueAddr)
 
-                            new_at = num
+                                new_at = num
 
-                            var negative = (num < 0) ? "-" : "";
-                            num = Math.abs(num)
+                                var negative = (num < 0) ? "-" : "";
+                                num = Math.abs(num)
 
-                            // yes this is horrible code. fix later
-                            padded = negative + num.toString().padStart(10 - negative.length, "0")
-                        }
-                        else {
-                            return ""
-                        }
-                        break
-                }
+                                // yes this is horrible code. fix later
+                                padded = negative + num.toString().padStart(10 - negative.length, "0")
+                            }
+                            else {
+                                return ""
+                            }
+                            break
+                    }
 
-                padded = `<span class='paddedBoxes' ">${padded}</span>`
+                    padded = `<span class='paddedBoxes' ">${padded}</span>`
 
-                if (old_at != new_at) {
-                    console.log(`\nCHANGE @Memory[${trueAddr + care_region.min}] : ${old_at} ==> ${new_at}\n`)
-                    padded = `<span id="scrollInto" style="background-color:orange;">${padded}</span>`
-                }
+                    if (old_at != new_at) {
+                        console.log(`\nCHANGE @Memory[${trueAddr + care_region.min}] : ${old_at} ==> ${new_at}\n`)
+                        padded = `<span id="scrollInto" style="background-color:orange;">${padded}</span>`
+                    }
 
-                return padded
-            }).join("")
+                    return padded
+                }).join("")
 
-            out += `${view.name.padEnd(mem_padlen + 2, "\xa0")}: <span style="border: 1px solid black; border-right:none;">${sbuffer}</span><br><br>`
-        })
+                out += `${view.name.padEnd(mem_padlen, "\xa0")} @${view.address} :<span style="border: 1px solid black; border-right:none;">${sbuffer}</span><br><br>`
+            })
+        }
     }
 
     return out

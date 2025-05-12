@@ -83,8 +83,8 @@ server.on("error", (err) => {
     console.error("Unable to open 8080\n", err)
 })
 
-server.listen(8080, () => {
-    console.log("Server open on http://localhost:8080")
+server.listen(8080, "0.0.0.0", () => {
+    console.log("Server open on http://0.0.0.0:8080")
 })
 
 

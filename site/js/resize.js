@@ -49,9 +49,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     const w =
                         ((prevSiblingWidth + dx) * 100) / resizer.parentNode.getBoundingClientRect().width;
                     prevSibling.style.width = w + '%';
-                    floater.style.left = (resizer.getBoundingClientRect().left - 33.5) + "px";
-                    //console.log(resizer.getBoundingClientRect().left)
-                    dbgline.style.width = w - 10 + '%'
+                    
+                    
+                    var l = resizer.getBoundingClientRect().left
+        floater.style.left = (l - 33.5) + "px";
+        dbgline.style.width = (l - 49) + "px";
                     break;
             }
 
@@ -90,8 +92,13 @@ document.addEventListener('DOMContentLoaded', function () {
         resizable(ele);
     });
 
-    floater.style.left = (document.getElementById("rhz").getBoundingClientRect().left - 33.5) + "px";
+    var l = document.getElementById("rhz").getBoundingClientRect().left
+        floater.style.left = (l - 33.5) + "px";
+        dbgline.style.width = (l - 49) + "px";
+
     window.addEventListener("resize", (e) => {
-        floater.style.left = (document.getElementById("rhz").getBoundingClientRect().left - 33.5) + "px";
+        var l = document.getElementById("rhz").getBoundingClientRect().left
+        floater.style.left = (l - 33.5) + "px";
+        dbgline.style.width = (l - 49) + "px";
     })
 });

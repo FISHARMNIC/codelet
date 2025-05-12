@@ -44,7 +44,7 @@ function setBreaks(code) {
         }
 
         if (inComment) {
-            if ((commentType == "line" && letter == "\n") || (commentType == "multi" && letter == "*" && next == "/")) {
+            if ((commentType == "single" && letter == "\n") || (commentType == "multi" && letter == "*" && next == "/")) {
                 inComment = false
                 commentType = "none"
             }

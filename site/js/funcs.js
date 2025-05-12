@@ -10,6 +10,8 @@ var play_bttn = document.getElementById("dbg_play")
 var vb1 = document.getElementById("mem_text_dump")
 var vb2 = document.getElementById("mem_text_map")
 
+var filePicker = document.getElementById("filePicker")
+
 cont_bttn.style.cursor = "not-allowed"
 pause_bttn.style.cursor = "not-allowed"
 play_bttn.style.cursor = "pointer"
@@ -36,3 +38,15 @@ function stepLineHide() {
     dbgline.style.display = "none"
 }
 
+filePicker.onchange = (e) => {
+    // taken from: https://stackoverflow.com/questions/16215771/how-to-open-select-file-dialog-via-js
+    var file = e.target.files[0]; 
+
+    var reader = new FileReader();
+    reader.readAsText(file,'UTF-8');
+ 
+    reader.onload = readerEvent => {
+       var content = readerEvent.target.result;
+       editor.setValue(content)
+    }
+}

@@ -62,22 +62,23 @@
     <title>Codelet</title>
 </head>
 
-<body style="height: 100%;" class="roboto-font">
+<body style="height: 99.3%;" class="roboto-font">
     <div id="linebar" style="display: none;"></div>
     <div>
 
         <ul>
-            <li><i class="fa fa-file-code-o" aria-hidden="true"></i></li>
+            <!-- class="fa fa-file-code-o" aria-hidden="true"  -->
             <li><i class="fa fa-floppy-o" aria-hidden="true"></i></li>
+            <li><input type="file" onchange="openFile()" accept=".c" id="filePicker"></input></li>
             <li style="margin-left: auto !important; order: 2; margin-right: 10px;">
                 <div style="display: inline-block !important; justify-content: center;">
-                    <label style="float: left; padding-right: 20px;">Memory mode </label>
-                <!-- <input type="radio" id="bttn_setview1" name="memmode" checked="checked"disabled> -->
+                    <label style="float: left; padding-right: 20px;padding-top:1.5px;">Memory mode </label>
+                    <!-- <input type="radio" id="bttn_setview1" name="memmode" checked="checked"disabled> -->
                     <!-- <input type="radio" id="bttn_setview2" name="memmode", disabled> -->
-                     <div style="border: 1px solid white; float:right">
-                    <label id="mem_text_dump" style="background-color: var(--env-dark);">Dump</label>
-                    <label>|</label>
-                    <label id="mem_text_map">Map</label>
+                    <div style="border: 1px solid white; float:right">
+                        <label id="mem_text_dump" style="background-color: var(--env-dark);">Dump</label>
+                        <label>|</label>
+                        <label id="mem_text_map">Map</label>
                     </div>
                 </div>
             </li>
@@ -96,14 +97,19 @@ char hello[] = "Hello!";
 
 int main()
 {
+    // Display individual slices, as opposed to the default MODE_DUMP
     js_memview(MODE_MAP);
 
     int i = 0;
     
+    // Show different variables by using js_addview(name, size, type)
+    // AS_SHORTS is also supported
     js_addview(i, 1, AS_WORDS);
     js_addview(buffer, 10, AS_BYTES);
     js_addview(hello, 6, AS_CHARS);
     
+    // Click the play button to run, the use the step button to advance lines
+    // Changes in memory will be highlighted in orange on the right!
     for(; i < 10; i++)
     {
         buffer[i] = i + 1;
@@ -123,7 +129,7 @@ int main()
             <!-- Bottom Right Section -->
             <div class="container__bottom">
                 <textarea id="terminal"
-                    style="width: 200%; height: 99%; resize: none; font-family: 'Courier New', monospace;"
+                    style="width: 200%; height: 99%; resize: none; font-family: 'Courier New', monospace; background-color: var(--env-darkest); color:white;"
                     readonly></textarea>
             </div>
         </div>

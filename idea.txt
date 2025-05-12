@@ -5,8 +5,12 @@ todos:
 
 function callable in c like js_showstring() and the memory like highlights it
 
-DO VARIABLES ON STACK HAVE THEIR CHANGES CAPTURED? maybe need second array for stack then concat
-
 errors in compiler dont unlock editor
 
 siders/numbers to set memory inspection size
+
+use fly.io for server?
+
+maybe padd @addr correctly in MODE_MAP (expects all addrs to be of same size)
+
+Mode to only manually insert breakpoints where needed

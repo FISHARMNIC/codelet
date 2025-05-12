@@ -74,21 +74,6 @@ https://phuoc.ng/collection/html-dom/create-resizable-split-views/
     width: 100%;
 }
 
-#floater {
-    position: absolute;
-    left: 47%;
-    top: calc(var(--navbar-height) * 1vh + 5px);
-    display: flex;
-    flex-direction: column;
-    background: var(--env-dark);
-    border-radius: 5px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    color: white;
-    padding: 10px;
-    z-index: 10;
-}
-
 i {
     padding-top: 10px;
     padding-bottom: 10px;

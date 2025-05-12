@@ -29,16 +29,18 @@
         resize: none;
         width: 495.5px;
 }
-/* 
-.pausebar
-{
-    width:1000px;
-    height: 100px;
 
-    color:orange;
-    position: relative;
-    z-index: 999;
-
-    top: 10px;
-    left: 10px;
-} */
+#floater {
+    position: absolute;
+    left: 47%;
+    top: calc(var(--navbar-height) * 1vh + 20px);
+    display: flex;
+    flex-direction: column;
+    background: var(--env-dark);
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    color: white;
+    padding: 10px;
+    z-index: 10;
+}

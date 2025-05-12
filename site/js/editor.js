@@ -18,7 +18,7 @@ const editor = CodeMirror.fromTextArea(textarea, {
     placeholder: 'Enter your C code here...',
 })
 
-editor.setSize(null, "100%");
+editor.setSize(null, "99%");
 
 editor.on("scroll", () => {
     stepLineSet(dbg_lineNo)
