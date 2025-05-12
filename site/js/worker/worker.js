@@ -194,7 +194,7 @@ function compare_memory(old_mem, new_mem) {
             var trueAddr = i + care_region.min
             if (old_mem[i] != new_mem[i]) {
                 console.log(`\nCHANGE @Memory[${trueAddr}] : ${old_mem[i]} ==> ${new_mem[i]}\n`)
-                out += `<span id="scrollInto" style="background-color:orange;">${new_mem[i].toString().padStart(3, "0")}</span> `
+                out += `<span id="scrollInto" style="background-color:orange !important;">${new_mem[i].toString().padStart(3, "0")}</span> `
             } else {
                 out += new_mem[i].toString().padStart(3, "0") + " "
             }

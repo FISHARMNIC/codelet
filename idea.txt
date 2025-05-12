@@ -16,3 +16,5 @@ maybe padd @addr correctly in MODE_MAP (expects all addrs to be of same size)
 Mode to only manually insert breakpoints where needed
 
 Maybe use c++ (em++) for arduino sim lessons
+
+slider for speed in unpaused mode

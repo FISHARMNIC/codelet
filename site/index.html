@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/colors.css">
     <link rel="stylesheet" href="css/mirrorsettings.css">
     <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/settings.css">
 
     <!-- FAFA CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
@@ -50,6 +51,7 @@
     <script src="js/console.js" defer></script>
     <script src="js/debugger.js" defer></script>
     <script src="js/funcs.js" defer></script>
+    <script src="js/settings.js" defer></script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,7 +72,7 @@
             <!-- class="fa fa-file-code-o" aria-hidden="true"  -->
             <li><i class="fa fa-floppy-o" aria-hidden="true"></i></li>
             <li><input type="file" onchange="openFile()" accept=".c" id="filePicker"></input></li>
-            <li style="margin-left: auto !important; order: 2; margin-right: 10px;">
+            <li style="margin-left: auto !important; margin-right: 10px;">
                 <div style="display: inline-block !important; justify-content: center;">
                     <label style="float: left; padding-right: 20px;padding-top:1.5px;">Memory mode </label>
                     <!-- <input type="radio" id="bttn_setview1" name="memmode" checked="checked"disabled> -->
@@ -82,6 +84,8 @@
                     </div>
                 </div>
             </li>
+            <i class="fa fa-cog" aria-hidden="true" style="padding-top:6.8px;font-size: larger;" onclick="settings_open()"></i>
+            <li> </li>
 
         </ul>
 
@@ -143,6 +147,18 @@ int main()
             aria-hidden="true" onclick="dbg_continue()"></i>
     </div>
     </div>
+
+    <div id="settingspup">
+        <i class="fa fa-times" aria-hidden="true" onclick="settings_close()"></i>
+        <br><br>
+        <label> These currently don't do anything</label>
+        <br><br>
+        <label>Unpaused speed</label>
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+        <br>
+        <label>Memory Inspection</label>
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+      </div>
 </body>
 
 </html>

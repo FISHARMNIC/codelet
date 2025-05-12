@@ -18,3 +18,15 @@
 .hg-line {
     background-color: #fffa91;
 }
+
+.vbar {
+    background-color: black;
+    background-size: 2px auto;
+}
+
+.paddedBoxes {
+    border-right: 1px solid black;
+    /* background-color: white; */
+    padding-right: 4px;
+    padding-left: 4px;
+}

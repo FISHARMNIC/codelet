@@ -3,3 +3,5 @@
 Stack variables data being overwritten by other functions
 
 buffer overflows (is that possible without rsp here? maybe call stack is separate)
+
+array overflows

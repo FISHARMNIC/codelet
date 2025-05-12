@@ -82,14 +82,3 @@ i {
 i:hover {
     cursor: pointer;
 }
-
-.vbar {
-    background-color: black;
-    background-size: 2px auto;
-}
-
-.paddedBoxes {
-    border-right: 1px solid black;
-    padding-right: 4px;
-    padding-left: 4px;
-}
