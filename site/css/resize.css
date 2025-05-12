@@ -22,7 +22,7 @@ https://phuoc.ng/collection/html-dom/create-resizable-split-views/
 .resizer[data-direction='vertical'] {
     background-color: #cbd5e0;
     cursor: ns-resize;
-    height: 5px;
+    height: 7px;
     width: 100%;
 }
 

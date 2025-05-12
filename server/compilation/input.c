@@ -28,17 +28,23 @@ __wasm_break__(16);
 __wasm_break__(17);
 
     
+    ;
+__wasm_break__(19);
+js_break();
+__wasm_break__(19);
+
+    
     // Click the play button to run, the use the step button to advance lines
     // Changes in memory will be highlighted in orange on the right!
     for(; i < 10; i++)
     {
-__wasm_break__(22);
+__wasm_break__(24);
 
         buffer[i] = i + 1;
-__wasm_break__(23);
+__wasm_break__(25);
 
     }
     return 0;
-__wasm_break__(25);
+__wasm_break__(27);
 
 }

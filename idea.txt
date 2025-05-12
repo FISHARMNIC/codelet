@@ -18,3 +18,5 @@ Mode to only manually insert breakpoints where needed
 Maybe use c++ (em++) for arduino sim lessons
 
 slider for speed in unpaused mode
+
+auto lineNo in js_break by adding 1 to prev bp since pp inserts __wasm_break__ before and after

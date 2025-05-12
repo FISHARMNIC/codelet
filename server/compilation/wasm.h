@@ -11,10 +11,13 @@ extern void __js_addview__(const char* name, void* addr, int bytes, int mode);
 extern void __js_removeview__(const char* name, void* addr);
 extern void __js_removeview_weak__(const char* name);
 extern void js_memview(int type);
-extern void js_break(int line);
+extern void js_break();
+extern void js_break_explicit(int line);
 
 #define MODE_DUMP 0
 #define MODE_MAP 1
+
+// #define __EM_JS_LN_INSERT__
 
 enum {
     AS_BYTES = 1,

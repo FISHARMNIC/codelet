@@ -8,16 +8,28 @@ function dbg_continue() {
     }
 }
 
-function dbg_unpause() {
-    if (program_running) {
-        wasm_worker.postMessage("PAUSEMODE")
-        if (pause_bttn.className == "fa fa-stop") {
+function dbg_unpause(force = false) {
+    function deflt() {
+        pause_bttn.style.color = "lightgreen"
+        pause_bttn.className = "fa fa-play"
+        pause_bttn.title = "Unpause the program and run without stepping"
+        cont_bttn.title = "Step to the next line"
+    }
+
+    if (force) {
+        deflt()
+    }
+    else if (program_running) {
+        if (pause_bttn.className == "fa fa-play") {
+            pause_bttn.style.color = "salmon"
             pause_bttn.className = "fa fa-pause"
             pause_bttn.title = "Resume single-step mode"
+            cont_bttn.title = "Continue execution"
+            wasm_worker.postMessage("NOSTEPMODE")
         }
         else {
-            pause_bttn.className = "fa fa-stop"
-            pause_bttn.title = "Unpause the program and run without stepping"
+            deflt()
+            wasm_worker.postMessage("STEPMODE")
         }
     }
 }

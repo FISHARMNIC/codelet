@@ -18,9 +18,10 @@ C visualization tool
 ### Usage
 
 ##### Interface
-* The `play` button is used to compile and start the program
-* The `step` button is used to step to the next instruction. Note that this isn't perfect since I essentially run your code through a small preprocessor that tries to insert breakpoints where possible. If you find any bugs please let me know! You can also insert manual breakpoints with `js_break(line)` (see below).
-* The `pause` button will cause the program to run normally, as opposed to single-step mode. Manual breakpoints will still pause execution however. Upon clicking it, it will turn into a `stop` button, which when clicked turns the program back into single-step mode
+* The `bolt` button is used to compile and start the program
+* The `step` (lowest) button is used to step to the next instruction. Note that this isn't perfect since I essentially run your code through a small preprocessor that tries to insert breakpoints where possible. If you find any bugs please let me know! You can also insert manual breakpoints with `js_break()` (see below).
+* The `play` button will cause the program to run normally, without automatic breakpoints. Manual breakpoints using `js_break` still work, and need to be stepped out of using the `step` button. Upon clicking the `play` button, it turns into a `pause` button. If a breakpoint is then encountered, the `pause` button can be clicked to resume step-by-step execution.
+
 #### JS interop functions
 * `js_memview(MODE_DUMP or MODE_MAP)`
     * Switches between memory display modes. 
@@ -36,9 +37,9 @@ C visualization tool
     * Removes all views of any variable whose name matches that of `variable`, ignoring its address
 * `js_removeview_all()`
     * Removes all existing views
-* `js_break(line)`
+* `js_break()`
     * Manual breakpoint that can be used to either pause execuption in non single-step mode, or add extra breakpoints in single-step mode
-    * Note that you currently **must** pass the current line number as `line` in order to have program display the stopped instruction correctly. I am working to get rid of this!
+    * This function won't always show the correct line, unless you put a semi-colon right before it like such: `;js_break();`. If for whatever reason you cannot do that (maybe in something like in the header of a `for` loop), you can use `js_break_explicit(line)` and provide the given line number.
 * io functions:
     * `console_string(s)`, `console_char(c)`, `console_int(i)` all currently work as expected
     * A lightweight version of `printf` also works. I currently only have it supporting `%d/%i, and %s`. This is going to be fixed soon (possibly by just switching to emscriptens printf).

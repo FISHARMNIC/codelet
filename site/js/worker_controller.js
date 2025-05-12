@@ -44,9 +44,9 @@ wasm_worker.onmessage = (message) => {
         cursorSet(document.body, "default")
 
         disableBttn(play_bttn)
-        enableBttn(pause_bttn, "salmon")
+        enableBttn(pause_bttn, "greenyellow")
 
-        pause_bttn.className = "fa fa-pause"
+        dbg_unpause(true)
 
         program_running = true
     }
@@ -56,14 +56,15 @@ wasm_worker.onmessage = (message) => {
 
         disableBttn(cont_bttn)
         cursorSet(document.body, "default")
-        enableBttn(play_bttn, "lightgreen")
-        disableBttn(pause_bttn)
+        enableBttn(play_bttn, "yellow")
 
         stepLineHide()
 
         editor.options.readOnly = false
         program_running = false
-        pause_bttn.className = "fa fa-pause"
+
+        dbg_unpause(true)
+        disableBttn(pause_bttn)
 
         if (command == "POSTFAIL") {
             window.alert("Error: could not connect/post to server")

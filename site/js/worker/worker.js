@@ -11,6 +11,8 @@ var memory_mode = 0
 
 var manualBreaks = false
 
+var lastBreak = 0;
+
 var asmodes = {
     AS_BYTES: 1,
     AS_SHORTS: 2,
@@ -80,6 +82,8 @@ var env = {
 
         var wasneg = lineNo < 0
         lineNo = Math.abs(lineNo)
+
+        lastBreak = lineNo
         //console.log("== Breakpoint Called! ==\n")
 
         var new_memory = Array.from(new Uint8Array(wasm.memory.buffer, care_region.min, care_region.size))
@@ -109,7 +113,11 @@ var env = {
     __program_finished__: function () {
         sendCommand("PROGRAM_EXIT")
     },
-    js_break: async function (lineNo) {
+    js_break_explicit: async function (lineNo) {
+        await env.__wasm_break__(-lineNo)
+    },
+    js_break: async function () {
+        var lineNo = lastBreak
         await env.__wasm_break__(-lineNo)
     },
     js_memview(mode) {
@@ -286,6 +294,7 @@ function compare_memory(old_mem, new_mem) {
 
 function reset() {
     manualBreaks = false
+    lastBreak = 0
     memory_mode = 0
     memory_views = []
     memory_snapshot = []
@@ -299,8 +308,12 @@ function waitEv(event) {
             if (event.data == "CONT") {
                 self.onmessage = normal_handler
                 resolve(event.data)
-            } else if(event.data == "PAUSEMODE") {
-                manualBreaks = !manualBreaks
+            } else if(event.data == "NOSTEPMODE") {
+                manualBreaks = true
+                self.onmessage = normal_handler
+                resolve(event.data)
+            } else if(event.data == "STEPMODE") {
+                manualBreaks = false
             }
         }
     })

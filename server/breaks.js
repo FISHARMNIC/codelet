@@ -47,6 +47,8 @@ function setBreaks(code) {
             if ((commentType == "single" && letter == "\n") || (commentType == "multi" && letter == "*" && next == "/")) {
                 inComment = false
                 commentType = "none"
+                // split.push(build, `\n__wasm_break__(${lineNumber});\n`)
+                // build = []
             }
         }
         else if (inQuotes) {

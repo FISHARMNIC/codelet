@@ -36,6 +36,9 @@
     top: calc(var(--navbar-height) * 1vh + 20px);
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 14px;
     background: var(--env-dark);
     border-radius: 5px;
     border-top-right-radius: 0px;
