@@ -159,7 +159,7 @@ function u8_to_u32(arr, i) {
 
 
 function compare_memory(old_mem, new_mem) {
-    //console.log("comparing", old_mem.size)
+    //console.log("comparing", old_mem.length)
 
     var out = ""
 
@@ -313,6 +313,7 @@ function reset() {
     manualBreaks = false
     memory_mode = 0
     memory_views = []
+    memory_snapshot = []
 }
 
 self.onmessage = (event) => {
