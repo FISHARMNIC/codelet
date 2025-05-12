@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "*.x": "code-text-binary",
-        "*.rst": "restructuredtext",
-        "*.s": "gas",
-        "jsdbg.h": "c"
-    }
-}
