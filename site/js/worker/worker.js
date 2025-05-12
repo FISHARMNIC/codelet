@@ -199,7 +199,7 @@ function compare_memory(old_mem, new_mem) {
     }
     else {
         if (memory_views.length == 0) {
-            out = 'Use "js_addview" to add slices!'
+            out = 'Use "js_addview" to add views!'
         }
         else {
             memory_views.forEach(view => {
