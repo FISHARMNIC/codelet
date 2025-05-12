@@ -97,10 +97,14 @@ char hello[] = "Hello!";
 int main()
 {
     js_memview(MODE_MAP);
+
+    int i = 0;
+    
+    js_addview(i, 4, AS_WORDS);
     js_addview(buffer, 10, AS_BYTES);
     js_addview(hello, 6, AS_CHARS);
-
-    for(int i = 0; i < 10; i++)
+    
+    for(; i < 10; i++)
     {
         buffer[i] = i + 1;
     }

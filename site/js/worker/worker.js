@@ -84,6 +84,8 @@ var env = {
 
         sendCommand("MEMORY", { mem: res })
 
+        // saved_console_log(await wasm.instance.emscripten_stack_get_current())
+
         memory_snapshot = new_memory
 
 
@@ -93,12 +95,17 @@ var env = {
 
         await dbg_wait()
     },
-    __give_section_info__: function (data, bss, rodata) {
-        section_info = { data, bss, rodata }
-        care_region.min = Math.min(data, bss, rodata)
-        care_region.max = Math.max(data, bss, rodata) + 1000
+    __give_section_info__: function (stack, data, bss, rodata) {
+        section_info = { stack, data, bss, rodata }
+        care_region.min = Math.min(stack, data, bss, rodata) - 1000
+        care_region.max = Math.max(stack, data, bss, rodata) + 1000
         care_region.size = care_region.max - care_region.min
-        //console.log(section_info)
+        //console.log(care_region)
+
+        if(care_region.size > 10000)
+        {
+            window.alert("Warning: large range of memory is begin tracked. May result in slower speeds")
+        }
     },
     __program_finished__: function () {
         sendCommand("PROGRAM_EXIT")
@@ -117,7 +124,10 @@ var env = {
         {
             mem_padlen = name.length
         }
-        console.log("views", memory_views)
+        //console.log("views", memory_views)
+        // saved_console_log("===>", wasm.instance.emscripten_stack_get_current())
+        // saved_console_log("===>", wasm.instance.emscripten_stack_get_base())
+        // saved_console_log("===>", wasm.instance.emscripten_stack_get_end())
     },
     console_double: console.log,
     console_int: console.log,
@@ -135,6 +145,12 @@ function read_wasm_string(base) {
 
     return new TextDecoder().decode(strBuf).slice(0, i);
 }
+
+function u8_to_u32(arr, i)
+{
+    return arr[i] | (arr[i+1] << 8) | (arr[i+2] << 16) | (arr[i+3] << 24)
+}
+
 
 function compare_memory(old_mem, new_mem) {
     //console.log("comparing", old_mem.size)
@@ -163,29 +179,56 @@ function compare_memory(old_mem, new_mem) {
             var end_addr = view.size + start_addr
             saved_console_log(new_mem.slice(start_addr, end_addr))
 
-            var sbuffer = new_mem.slice(start_addr, end_addr).map((x,i) => {
+            var sliced = new_mem.slice(start_addr, end_addr)
+            var sbuffer = sliced.map((x,i) => {
                 var trueAddr = start_addr + i
 
                 var padded;
+
+                var old_at = old_mem[trueAddr]
+                var new_at = new_mem[trueAddr] 
 
                 if(view.mode == asmodes.AS_CHARS)
                 {
                     padded = String.fromCharCode(x)
                 }
-                else
+                else if(view.mode == asmodes.AS_BYTES)
                 {
-                    if(view.mode != asmodes.AS_BYTES)
-                    {
-                        console.log(`NOTE: only AS_CHARS and AS_BYTES currently supported. Treating as AS_BYTES`)
-                    }
                     padded = x.toString().padStart(3, "0")
                 }
+                else if(view.mode == asmodes.AS_WORDS)
+                {
+                    if(i % 4 == 0)
+                    {
+                        var num = u8_to_u32(sliced, i)
+                        old_at = u8_to_u32(old_mem, trueAddr)
+
+                        new_at = num
+
+                        var negative = (num < 0) ? "-" : "";
+                        num = Math.abs(num)
+
+                        padded =  negative + num.toString().padStart(10, "0")
+                    }
+                    else
+                    {
+                        return ""
+                    }
+                }
+                // else
+                // {
+                //     if(view.mode != asmodes.AS_BYTES)
+                //     {
+                //         console.log(`NOTE: only AS_CHARS and AS_BYTES currently supported. Treating as AS_BYTES`)
+                //     }
+                //     padded = x.toString().padStart(3, "0")
+                // }
 
                 padded = `<span class='paddedBoxes' ">${padded}</span>`
 
-                if(old_mem[trueAddr] != new_mem[trueAddr])
+                if(old_at != new_at)
                 {
-                    console.log(`\nCHANGE @Memory[${trueAddr + care_region.min}] : ${old_mem[trueAddr]} ==> ${old_mem[trueAddr]}\n`)
+                    console.log(`\nCHANGE @Memory[${trueAddr + care_region.min}] : ${old_at} ==> ${new_at}\n`)
                     padded = `<span id="scrollInto" style="background-color:orange;">${padded}</span>`
                 }
 
@@ -241,7 +284,8 @@ async function run(data) {
                 wasm.instance = exports
                 wasm.memory = exports.memory
 
-                //saved_console_log(wasm.memory)
+                // saved_console_log("===>", await wasm.instance.emscripten_stack_get_base())
+                // saved_console_log("===>", await wasm.instance.emscripten_stack_get_current())
                 await wasm.instance.start()
 
             })

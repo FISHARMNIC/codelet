@@ -6,12 +6,13 @@ __attribute__((section(".rodata"))) int __WASM_RODATA_BEGIN__;
 
 int main();
 
-extern void __give_section_info__(int* a, int* b, int* c);
+extern void __give_section_info__(int* s, int* a, int* b, int* c);
 extern void __program_finished__();
 
 EMSCRIPTEN_KEEPALIVE void start()
 {
-    __give_section_info__(&__WASM_DATA_BEGIN__, &__WASM_BSS_BEGIN__, &__WASM_RODATA_BEGIN__);
+    int __base__;
+    __give_section_info__(&__base__, &__WASM_DATA_BEGIN__, &__WASM_BSS_BEGIN__, &__WASM_RODATA_BEGIN__);
     main();
     __program_finished__();
 }

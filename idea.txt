@@ -7,4 +7,6 @@ function callable in c like js_showstring() and the memory like highlights it
 
 DO VARIABLES ON STACK HAVE THEIR CHANGES CAPTURED? maybe need second array for stack then concat
 
-why in map mode it says change 0 ==> 0 always
+errors in compiler dont unlock editor
+
+siders/numbers to set memory inspection size
