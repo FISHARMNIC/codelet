@@ -30,6 +30,12 @@ C visualization tool
     * Adds slices of memory to the display (only works in memview `MODE_MAP`)
     * type can be any of the following: `AS_CHARS, AS_BYTES, AS_SHORTS, AS_WORDS` 
     * Note that size should be given in respect to the given type, not in bytes. So an integer array `a` with three elements should be passed as: `js_addview(a, 3, AS_WORDS)`
+* `js_removeview(variable)`
+    * Removes all views of `variable` (if it exists), making sure that each view it removes holds the same address of `variable`. This means that if you have two variables `i`, each in different places on the stack, this function will only remove the variable `i` being passed to the function.
+* `js_removeview_weak(variable)`
+    * Removes all views of any variable whose name matches that of `variable`, ignoring its address
+* `js_removeview_all()`
+    * Removes all existing views
 * `js_break(line)`
     * Manual breakpoint that can be used to either pause execuption in non single-step mode, or add extra breakpoints in single-step mode
     * Note that you currently **must** pass the current line number as `line` in order to have program display the stopped instruction correctly. I am working to get rid of this!

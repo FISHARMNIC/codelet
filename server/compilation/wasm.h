@@ -8,6 +8,8 @@
 
 extern void __wasm_break__(int arg);
 extern void __js_addview__(const char* name, void* addr, int bytes, int mode);
+extern void __js_removeview__(const char* name, void* addr);
+extern void __js_removeview_weak__(const char* name);
 extern void js_memview(int type);
 extern void js_break(int line);
 
@@ -22,5 +24,8 @@ enum {
 };
 
 #define js_addview(variable, size, disp) __js_addview__(#variable, &variable, size, disp)
+#define js_removeview(variable) __js_removeview__(#variable, &variable)
+#define js_removeview_weak(variable)  __js_removeview_weak__(#variable)
+extern void js_removeview_all();
 
 #endif

@@ -132,6 +132,24 @@ var env = {
         // saved_console_log("===>", wasm.instance.emscripten_stack_get_base())
         // saved_console_log("===>", wasm.instance.emscripten_stack_get_end())
     },
+    __js_removeview__: function(name, address)
+    {
+        name = read_wasm_string(name)
+        memory_views = memory_views.filter(view => {
+            return !((view.name == name) && (view.address == address))
+        })
+    },
+    __js_removeview_weak__: function(name)
+    {
+        name = read_wasm_string(name)
+        memory_views = memory_views.filter(view => {
+            return(view.name != name)
+        })
+    },
+    js_removeview_all: function()
+    {
+        memory_views = []
+    },
     console_double: console.log,
     console_int: console.log,
     console_char: (c) => console.log(String.fromCharCode(c)),
