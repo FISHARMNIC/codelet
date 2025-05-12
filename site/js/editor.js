@@ -3,11 +3,13 @@ const textarea = document.getElementById("code")
 const editor = CodeMirror.fromTextArea(textarea, {
     lineNumbers: true,
     mode: 'text/x-csrc',
-    extraKeys: {
-        "Tab": function(cm){
-            cm.replaceSelection("    " , "end");
-        }
-    },
+    // extraKeys: {
+    //     "Tab": function(cm){
+    //         cm.replaceSelection("    " , "end");
+    //     }
+    // },
+    indentUnit: 4,
+    indentWithTabs: false,
     foldOptions: {
         rangeFinder: CodeMirror.fold.brace
     },

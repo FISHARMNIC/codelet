@@ -2,7 +2,7 @@ const http = require('http');
 const finalhandler = require('finalhandler')
 const serveStatic = require('serve-static')
 const fs = require('fs')
-const {execSync, exec} = require('child_process')
+const { execSync, exec } = require('child_process')
 
 const site_dir = `${__dirname}/../site`
 const serve = serveStatic(site_dir)
@@ -25,7 +25,7 @@ const server = http.createServer(function (req, res) {
         if (!(fs.existsSync(site_dir + '/' + req.url))) {
             console.error(`File ${site_dir + '/' + req.url} does not exist!`)
         }
-          
+
         var done = finalhandler(req, res);
         serve(req, res, done)
     }
@@ -44,11 +44,9 @@ const server = http.createServer(function (req, res) {
     }
 })
 
-function handle(parsed)
-{
-    function fmt(success, data)
-    {
-        return JSON.stringify({success, data})
+function handle(parsed) {
+    function fmt(success, data) {
+        return JSON.stringify({ success, data })
     }
 
     var data = parsed.data
@@ -57,30 +55,37 @@ function handle(parsed)
 
     console.log("================\n", data, "================")
 
-    switch(parsed.command)
-    {
+    switch (parsed.command) {
         case "compile":
             fs.writeFileSync(`${compiler_dir}/input.c`, data)
-            try{
+            try {
                 const out = execSync(`${compiler_dir}/compile.sh`)
                 const compiledData = fs.readFileSync(`${compiler_dir}/output.wasm`)
-                return(fmt(1, {out, bin: compiledData}))
+                return (fmt(1, { out, bin: compiledData }))
             }
-            catch(err)
-            {
-                return(fmt(0, err.message))
+            catch (err) {
+                return (fmt(0, err.message))
             }
             break;
         default:
-            return(fmt(0, "?"))
+            return (fmt(0, "?"))
     }
 }
 
-process.on('SIGINT', function () {
+process.on('SIGINT', () => {
+    console.log("\nClosing server...")
     server.close()
+    console.log("Done!")
     process.exit(0)
 });
 
+server.on("error", (err) => {
+    console.error("Unable to open 8080\n", err)
+})
 
-server.listen(8080)
+server.listen(8080, () => {
+    console.log("Server open on http://localhost:8080")
+})
+
+
 //exec(`open -a "Google Chrome" http://localhost:8080`);

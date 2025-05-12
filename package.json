@@ -1,0 +1,16 @@
+{
+  "name": "codelet",
+  "version": "1.0.0",
+  "description": "C visualization tool",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node server/main.js"
+  },
+  "author": "Nicolas Quijano",
+  "license": "SEE LICENSE.txt",
+  "dependencies": {
+    "serve-static": "*",
+    "finalhandler": "*"
+  },
+  "main": "server/main.js"
+}

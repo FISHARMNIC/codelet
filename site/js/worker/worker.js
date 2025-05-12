@@ -102,8 +102,7 @@ var env = {
         care_region.size = care_region.max - care_region.min
         //console.log(care_region)
 
-        if(care_region.size > 10000)
-        {
+        if (care_region.size > 10000) {
             window.alert("Warning: large range of memory is begin tracked. May result in slower speeds")
         }
     },
@@ -115,13 +114,12 @@ var env = {
     },
     js_memview(mode) {
         memory_mode = mode
-        sendCommand("MEMVIEW", {mode})
+        sendCommand("MEMVIEW", { mode })
     },
     __js_addview__: function (name, address, size, mode) {
         name = read_wasm_string(name)
-        memory_views.push({ name: name, address, size, mode})
-        if(name.length > mem_padlen)
-        {
+        memory_views.push({ name: name, address, size, mode })
+        if (name.length > mem_padlen) {
             mem_padlen = name.length
         }
         //console.log("views", memory_views)
@@ -146,9 +144,12 @@ function read_wasm_string(base) {
     return new TextDecoder().decode(strBuf).slice(0, i);
 }
 
-function u8_to_u32(arr, i)
-{
-    return arr[i] | (arr[i+1] << 8) | (arr[i+2] << 16) | (arr[i+3] << 24)
+function u8_to_u16(arr, i) {
+    return arr[i] | (arr[i + 1] << 8)
+}
+
+function u8_to_u32(arr, i) {
+    return arr[i] | (arr[i + 1] << 8) | (arr[i + 2] << 16) | (arr[i + 3] << 24)
 }
 
 
@@ -177,57 +178,65 @@ function compare_memory(old_mem, new_mem) {
         memory_views.forEach(view => {
             var start_addr = view.address - care_region.min
             var end_addr = view.size + start_addr
-            saved_console_log(new_mem.slice(start_addr, end_addr))
+            //saved_console_log(new_mem.slice(start_addr, end_addr))
 
             var sliced = new_mem.slice(start_addr, end_addr)
-            var sbuffer = sliced.map((x,i) => {
+            var sbuffer = sliced.map((x, i) => {
                 var trueAddr = start_addr + i
 
                 var padded;
 
                 var old_at = old_mem[trueAddr]
-                var new_at = new_mem[trueAddr] 
+                var new_at = new_mem[trueAddr]
 
-                if(view.mode == asmodes.AS_CHARS)
-                {
-                    padded = String.fromCharCode(x)
+                switch (view.mode) {
+                    case asmodes.AS_CHARS:
+                        padded = String.fromCharCode(x)
+                        break
+
+                    case asmodes.AS_BYTES:
+                        padded = x.toString().padStart(3, "0")
+                        break
+
+                    case asmodes.AS_SHORTS:
+                        if (i % 2 == 0) {
+                            var num = u8_to_u16(sliced, i)
+                            old_at = u8_to_u16(old_mem, trueAddr)
+
+                            new_at = num
+
+                            var negative = (num < 0) ? "-" : "";
+                            num = Math.abs(num)
+
+                            padded = negative + num.toString().padStart(5, "0")
+                        }
+                        else {
+                            return ""
+                        }
+                        break
+
+                    case asmodes.AS_WORDS:
+                        if (i % 4 == 0) {
+                            var num = u8_to_u32(sliced, i)
+                            old_at = u8_to_u32(old_mem, trueAddr)
+
+                            new_at = num
+
+                            var negative = (num < 0) ? "-" : "";
+                            num = Math.abs(num)
+
+                            // yes this is horrible code. fix later
+                            padded = negative + num.toString().padStart(10 - negative.length, "0")
+                        }
+                        else {
+                            return ""
+                        }
+                        break
                 }
-                else if(view.mode == asmodes.AS_BYTES)
-                {
-                    padded = x.toString().padStart(3, "0")
-                }
-                else if(view.mode == asmodes.AS_WORDS)
-                {
-                    if(i % 4 == 0)
-                    {
-                        var num = u8_to_u32(sliced, i)
-                        old_at = u8_to_u32(old_mem, trueAddr)
-
-                        new_at = num
-
-                        var negative = (num < 0) ? "-" : "";
-                        num = Math.abs(num)
-
-                        padded =  negative + num.toString().padStart(10, "0")
-                    }
-                    else
-                    {
-                        return ""
-                    }
-                }
-                // else
-                // {
-                //     if(view.mode != asmodes.AS_BYTES)
-                //     {
-                //         console.log(`NOTE: only AS_CHARS and AS_BYTES currently supported. Treating as AS_BYTES`)
-                //     }
-                //     padded = x.toString().padStart(3, "0")
-                // }
 
                 padded = `<span class='paddedBoxes' ">${padded}</span>`
 
-                if(old_at != new_at)
-                {
+                if (old_at != new_at) {
                     console.log(`\nCHANGE @Memory[${trueAddr + care_region.min}] : ${old_at} ==> ${new_at}\n`)
                     padded = `<span id="scrollInto" style="background-color:orange;">${padded}</span>`
                 }
@@ -292,8 +301,7 @@ async function run(data) {
     })
 }
 
-function reset()
-{
+function reset() {
     memory_views = []
 }
 

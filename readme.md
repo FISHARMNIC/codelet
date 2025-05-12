@@ -16,8 +16,8 @@ C visualization tool
 ## Installation
 ### Dependencies
 * [emcc](https://emscripten.org/docs/getting_started/downloads.html)
-* [node](https://nodejs.org/en/download)
-    * [serve-static](https://www.npmjs.com/package/serve-static)
-    * [finalhandler](https://www.npmjs.com/package/finalhandler)
 
-Then just run `node main` in the `server` folder and navigate to `localhost:8080`
+### Running
+* `npm install` 
+* `npm run build`
+* Navigate to `http://localhost:8080`
