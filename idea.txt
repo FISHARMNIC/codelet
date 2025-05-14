@@ -27,3 +27,5 @@ add stop on memory change
 
 do addview for structs too
     -> using special macro where you create structs differently and it captures everything
+
+structs with curly brackets and list inits cause breakpoints

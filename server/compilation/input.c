@@ -42,3 +42,26 @@ __wasm_break__(23);
 __wasm_break__(25);
 
 }
+
+/*
+#include "wasm.h"
+
+typedef struct
+{
+	int a;
+    int b;
+} mystruct_t;
+
+int main()
+{
+    // Display individual slices, as opposed to the default MODE_DUMP
+    js_memview(MODE_MAP);
+
+    mystruct_t s;
+    
+    js_addview(s.a, 1, AS_WORDS);
+    js_addview(s.b, 1, AS_WORDS);
+
+    return 0;
+}
+*/

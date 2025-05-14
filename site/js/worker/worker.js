@@ -22,6 +22,11 @@ var asmodes = {
     AS_WORDS: 3,
     AS_CHARS: 4
 }
+
+// var acceptedTypes = {
+//     int: asmodes.AS_WORDS,
+//     char: asmodes.AS_WORDS
+// }
 // #endregion
 
 //#region comms.js
@@ -144,6 +149,23 @@ var env = {
         // saved_console_log("===>", wasm.instance.emscripten_stack_get_current())
         // saved_console_log("===>", wasm.instance.emscripten_stack_get_base())
         // saved_console_log("===>", wasm.instance.emscripten_stack_get_end())
+    },
+    __js_addview_struct: function (name, addr, infostr)
+    {
+        /*
+        name = read_wasm_string(name)
+        infostr = read_wasm_string(infostr)
+        // optimize later
+        infostr = infostr.split(";").filter(x => x && x.length != 0).map(x => {
+            var arr = x.split(" ").filter(x => x && x.length != 0)
+            if(arr.length != 2)
+            {
+                console.log(`WARNING: struct instance "${name}" has improperly formatted property "${x}". Use non-pointer types or predifined types like "CHAR_PTR"`)
+            }
+            return {type: arr[0], name: arr[1]}
+        })
+        saved_console_log(name, infostr)
+        */
     },
     __js_removeview__: function(name, address)
     {

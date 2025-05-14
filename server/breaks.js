@@ -26,6 +26,8 @@ function setBreaks(code) {
     var waitingOpen = false
     var waitingClose = false
 
+    var prevNonWspaceChar = ""
+
     var lineNumber = 1
 
     var depth = 0
@@ -58,8 +60,11 @@ function setBreaks(code) {
             }
         }
         else {
-            if (letter == "{") {
+            if (letter == "{" && prevNonWspaceChar == ")") {
                 depth++
+            } else if(letter == "{")
+            {
+                console.log("AAAAAA", prevNonWspaceChar, letter)
             }
 
             if (letter == "/") // entering comment
@@ -89,7 +94,7 @@ function setBreaks(code) {
             else if (letter == ")" && waitingClose) {
                 waitingClose = false
             }
-            else if (letter == "}") {
+            else if (letter == "}" && depth > 0) {
                 depth--
             }
             else if ((letter == ";" || letter == "{") && depth > 0 && !waitingClose) {
@@ -97,6 +102,12 @@ function setBreaks(code) {
                 build = []
             }
         }
+
+        if(letter != " " && letter != "\t" && letter != "\n")
+        {
+            prevNonWspaceChar = letter
+        }
+
     })
     split.push(build)
 
