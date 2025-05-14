@@ -11,6 +11,8 @@ const setBreaks = require("./breaks.js")
 
 const compiler_dir = `${__dirname}/compilation`
 
+const port = process.env.PORT || 8080
+
 const server = http.createServer(function (req, res) {
     if (req.method == "GET") {
 
@@ -83,8 +85,8 @@ server.on("error", (err) => {
     console.error("Unable to open 8080\n", err)
 })
 
-server.listen(8080, "0.0.0.0", () => {
-    console.log("Server open on http://0.0.0.0:8080")
+server.listen(port, "0.0.0.0", () => {
+    console.log("Server open on http://0.0.0.0:" + port)
 })
 
 
