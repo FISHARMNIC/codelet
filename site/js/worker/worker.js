@@ -1,3 +1,6 @@
+// import * as Asyncify from 'https://unpkg.com/asyncify-wasm?module'
+import * as Asyncify from '/js/worker/asyncify.mjs'
+
 // #region globals
 var wasm_bin
 var wasm = {}
@@ -325,7 +328,6 @@ async function dbg_wait() {
 //#endregion
 
 // #region compiler and instantiator
-import * as Asyncify from 'https://unpkg.com/asyncify-wasm?module'
 
 async function run(data) {
     var textContent = data.textContent

@@ -20,3 +20,10 @@ Maybe use c++ (em++) for arduino sim lessons
 slider for speed in unpaused mode
 
 auto lineNo in js_break by adding 1 to prev bp since pp inserts __wasm_break__ before and after
+
+map doesn go back to dump
+
+add stop on memory change
+
+do addview for structs too
+    -> using special macro where you create structs differently and it captures everything

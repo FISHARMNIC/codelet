@@ -16,6 +16,7 @@ const editor = CodeMirror.fromTextArea(textarea, {
     foldGutter: true,
     // gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], // disabled for now
     placeholder: 'Enter your C code here...',
+    scrollbarStyle: null
 })
 
 editor.setSize(null, "99%")

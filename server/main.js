@@ -20,7 +20,7 @@ const server = http.createServer(function (req, res) {
 
         if (url[0] == "") req.url = "index.html"
 
-        //console.log("GET", req.url)
+        console.log("GET", req.url)
 
         if (!(fs.existsSync(site_dir + '/' + req.url))) {
             console.error(`File ${site_dir + '/' + req.url} does not exist!`)

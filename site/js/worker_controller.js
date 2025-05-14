@@ -37,6 +37,10 @@ wasm_worker.onmessage = (message) => {
     else if (command == "COMPILE_START") {
         console.log("::: Compiling...\n")
         cursorSet(document.body, "wait")
+
+        vb1.style.backgroundColor = "var(--env-dark)"
+        vb2.style.backgroundColor = "var(--env-medium)"
+
     }
     else if (command == "COMPILE_DONE") {
         console.log("::: Running...\n")
@@ -51,7 +55,7 @@ wasm_worker.onmessage = (message) => {
         program_running = true
     }
     else if (command == "PROGRAM_EXIT" || command == "COMPFAIL" || command == "POSTFAIL") {
-        
+
         console.log("\n::: Exited!\n")
 
         disableBttn(cont_bttn)
@@ -72,7 +76,7 @@ wasm_worker.onmessage = (message) => {
     }
     else if (command == "MEMORY") {
         memory.innerHTML = data.mem
-        document.getElementById("scrollInto")?.scrollIntoView({block: 'nearest', inline: 'start'})
+        document.getElementById("scrollInto")?.scrollIntoView({ block: 'nearest', inline: 'start' })
     }
     else if (command == "MEMVIEW") {
         if (data.mode == 0) {
