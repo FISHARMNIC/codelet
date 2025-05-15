@@ -1,6 +1,6 @@
 # Codelet
 
-C visualization tool
+C memory visualization tool + debugger. [Visit it live!](https://codelet-300i.onrender.com/) Note: unfortunately, the server may take up to 1 minute to launch if no one has recently used it. If you don't want this, you can run it locally using the instructions below. 
 <p align="center">
 <img width="700" alt="Screen Shot 2025-05-11 at 8 28 07 PM" src="https://github.com/user-attachments/assets/7257c92d-f796-4367-8075-ce12c25d3894" />
 <img width="700" alt="Screen Shot 2025-05-11 at 8 23 11 PM" src="https://github.com/user-attachments/assets/c2bef6a0-b9d8-4448-858c-57b89753a3cb" />
@@ -9,15 +9,13 @@ C visualization tool
 # Currently Working
 * Single-stepping
 * Shows the parts of memory that changed after each line
+* **to-do:**
+    * Learning mode with hands on activities
+    * UI and speed improvements
 
-### Plans
-* Learning mode with hands on activities
-* UI and speed improvements
-* Offloading from local server to either external on running emcc in the browser itself
+# Usage
 
-### Usage
-
-##### Interface
+#### Interface
 * The `bolt` button is used to compile and start the program
 * The `step` (lowest) button is used to step to the next instruction. Note that this isn't perfect since I essentially run your code through a small preprocessor that tries to insert breakpoints where possible. If you find any bugs please let me know! You can also insert manual breakpoints with `js_break()` (see below).
 * The `play` button will cause the program to run normally, without automatic breakpoints. Manual breakpoints using `js_break` still work, and need to be stepped out of using the `step` button. Upon clicking the `play` button, it turns into a `pause` button. If a breakpoint is then encountered, the `pause` button can be clicked to resume step-by-step execution.
@@ -47,13 +45,13 @@ C visualization tool
 
 
 # Installation
-### Dependencies
+#### Dependencies
 * [emcc](https://emscripten.org/docs/getting_started/downloads.html)
 
-### Running
+#### Running
 * `npm install` 
 * `npm run build`
 * Navigate to `http://localhost:8080`
 
-## Credits
+# Credits
 All credit for the split-screen and resizing goes to [Phuoc Nguyen](https://phuoc.ng/collection/html-dom/create-resizable-split-views/)
