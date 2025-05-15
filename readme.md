@@ -4,7 +4,7 @@ C memory visualization tool + debugger.
   
 [Visit it live!](https://codelet-300i.onrender.com/)  
   
-*Note: unfortunately, the server may take up to 1 minute to launch if no one has recently used it. If you don't want this, you can run it locally using the instructions below.*  
+*Note: unfortunately, the server may take up to 1 minute to launch if no one has recently used it. Upon launching, you might get a browser error. If such, simply reload the page and it should work. If you don't want this, you can run it locally using the instructions below.*  
 <p align="center">
 <img width="700" alt="Screen Shot 2025-05-11 at 8 28 07 PM" src="https://github.com/user-attachments/assets/7257c92d-f796-4367-8075-ce12c25d3894" />
 <img width="700" alt="Screen Shot 2025-05-11 at 8 23 11 PM" src="https://github.com/user-attachments/assets/c2bef6a0-b9d8-4448-858c-57b89753a3cb" />
